@@ -1,0 +1,461 @@
+{% extends 'base.html' %}
+{% block page-title %}
+Index
+{% endblock %}
+{% block script %}
+
+<script type="text/javascript">
+    //虽然下面的代码写的很烂，但是我是不会改的，哈哈哈
+    $(function () {
+        //标签+属性选择所有<编辑>按钮
+        edit()
+        //为每一个确定按钮设置点击事件
+        confirm()
+        //全选/反选
+        $('#select_header').click(function () {
+            //判断checkbox是否选中
+            var flag = this.checked;
+            $('#ApiHeader input[type="checkbox"]').attr('checked', flag);
+        });
+        $('#select_response').click(function () {
+            //判断checkbox是否选中
+            var flag = this.checked;
+            $('#ApiResponse input[type="checkbox"]').attr('checked', flag);
+        });
+        $('#select_Parameter').click(function () {
+            //判断checkbox是否选中
+            var flag = this.checked;
+            $('#ApiParameter input[type="checkbox"]').attr('checked', flag);
+        });
+        //增加一行
+        $('#addHeader').click(function () {
+            var tables = $('#ApiHeader')
+            var addtr = $("<tr>" +
+                "<td><input type=\"checkbox\"></td>" +
+                "<td></td>" +
+                "<td></td>" +
+                "<td>\n" +
+                "<input type=\"button\" value=\"编辑\" class=\"btn btn-default\">\n" +
+                "<input type=\"button\" value=\"确定\" class=\"btn btn-default\">\n" +
+                "</td>" +
+                "</tr>");
+
+            addtr.appendTo(tables);
+            $('input[value="编辑"]').on("click", edit());
+            $('input[value="确定"]').on("click", confirm());
+        });
+
+        $('#addResponse').click(function () {
+            var tables = $('#ApiResponse')
+            var addtr = $("<tr>\n" +
+                "<td><input type=\"checkbox\"></td>\n" +
+                "<td></td>\n" +
+                "<td></td>\n" +
+                "<td><select class=\"form-control\">\n" +
+                "<option value=\"string\" selected=\"selected\">string</option>\n" +
+                "<option value=\"int\">int</option>\n" +
+                "</select></td>\n" +
+                "<td><input type=\"radio\"></td>\n" +
+                "<td></td>\n" +
+                "<td>\n" +
+                "<input type=\"button\" value=\"编辑\" class=\"btn btn-default\">\n" +
+                "<input type=\"button\" value=\"确定\" class=\"btn btn-default\">\n" +
+                "</td>\n" +
+                "</tr>");
+
+            addtr.appendTo(tables);
+            $('input[value="编辑"]').on("click", edit());
+            $('input[value="确定"]').on("click", confirm());
+        });
+        $('#addParameter').click(function () {
+            var tables = $('#ApiParameter')
+            var addtr = $("<tr>\n" +
+                "<td><input type=\"checkbox\"></td>\n" +
+                "<td></td>\n" +
+                "<td></td>\n" +
+                "<td><select class=\"form-control\">\n" +
+                "<option value=\"string\" selected=\"selected\">string</option>\n" +
+                "<option value=\"int\">int</option>\n" +
+                "</select></td>\n" +
+                "<td><input type=\"radio\"></td>\n" +
+                "<td></td>\n" +
+                "<td>\n" +
+                "<input type=\"button\" value=\"编辑\" class=\"btn btn-default\">\n" +
+                "<input type=\"button\" value=\"确定\" class=\"btn btn-default\">\n" +
+                "</td>\n" +
+                "</tr>");
+
+            addtr.appendTo(tables);
+            $('input[value="编辑"]').on("click", edit());
+            $('input[value="确定"]').on("click", confirm());
+        });
+
+        //删除
+        $('#deleteHeader').click(function () {
+            $('#ApiHeader td input[type=checkbox]').each(function () {
+                if ($(this).is(":checked")) {
+//                        alert($(this).val());
+                    $(this).parent().parent().remove();
+                }
+            })
+
+        });
+        $('#deleteResponse').click(function () {
+            $('#ApiResponse td input[type=checkbox]').each(function () {
+                if ($(this).is(":checked")) {
+//                        alert($(this).val());
+                    $(this).parent().parent().remove();
+                }
+            })
+
+        });
+        $('#deleteParameter').click(function () {
+            $('#ApiParameter td input[type=checkbox]').each(function () {
+                if ($(this).is(":checked")) {
+//                        alert($(this).val());
+                    $(this).parent().parent().remove();
+                }
+            })
+
+        });
+        $('#formdata').change(function () {
+            $('#textforraw').css('display', 'none');
+            $('#tableforformdata').css('display', 'inline');
+        });
+        $('#raw').change(function () {
+            $('#textforraw').css('display', 'inline');
+            $('#tableforformdata').css('display', 'none');
+        });
+        $.ajax({
+            url: '/api/get_project/',
+            type: 'GET',
+            dataType: "json",
+            success: function (project_list) {
+                $.each(project_list.value, function (index, value) {
+                    option = $('<option value="' + value.project_name + '">' + value.project_name + '</option>')
+                    option.appendTo($('#belong_project'))
+                })
+            }
+        });
+        $('#belong_project').change(function () {
+            $('#belong_module').empty()
+            var checkText = $("#belong_project").find("option:selected").text();
+            $.ajax({
+                url: '/api/get_module/',
+                type: 'POST',
+                dataType: "json",
+                data: {'project_name': $("#belong_project").find("option:selected").text()},
+                success: function (module_list) {
+                    $.each(module_list.value, function (index, value) {
+                        option = $('<option value="' + value.module_name + '">' + value.module_name + '</option>')
+                        option.appendTo($('#belong_module'))
+                    })
+                }
+            });
+        })
+        
+       $('#save').click(function () {
+           $.ajax({
+               url:'/api/Save_ApiInfo/',
+               type:'POST',
+               data:$("#testcase-form").serialize(),
+               dataType:"json",
+               success:function () {
+                   
+               }
+
+           })
+       })
+
+    });
+
+
+    function edit() {
+        $('input[value="编辑"]').click(function () {
+            //获取每一个<编辑>按钮的 下标（从0开始 所以需要+1 = 按钮在表格的所在行数）
+            var numId = $('input[value="编辑"]').index($(this)) + 1;
+            if ($(this).parent().parent().parent().parent().attr('id') == "ApiParameter") {
+                numId = numId + 1;
+            }
+            if ($(this).parent().parent().parent().parent().attr('id') == "ApiResponse") {
+                numId = numId + 2;
+            }
+            //选择表格中的所有tr 通过eq方法取得当前tr
+            var ttr = $('table tr').eq(numId);
+            /*当前行使用find方法找到每一个td列
+             each方法为每一个td设置function
+             */
+            ttr.find("td").each(function () {
+                /*过滤 td中的元素
+                 checkbox 、 button、text 不需要执行append
+                 注意 return 为 跳出当前 each
+                 return false 为 跳出整个 each
+                 */
+                if ($(this).children("input[type='checkbox']").length > 0) {
+                    return;
+                }
+                if ($(this).children("input[type='button']").length > 0) {
+                    return;
+                }
+                if ($(this).children("input[type='text']").length > 0) {
+                    return;
+                }
+                if ($(this).children("input[type='radio']").length > 0) {
+                    return;
+                }
+                if ($(this).children("select").length > 0) {
+                    return;
+                }
+                var tdText = $(this).html();
+                $(this).html("");
+                var inputObj = $("<input type='text'>");
+                inputObj.appendTo($(this));
+                inputObj.css("width", "100%");
+                inputObj.val(tdText);
+            });
+        });
+    }
+
+    function confirm() {
+        $('input[value="确定"]').click(function () {
+            /*通过parents方法获取<确定>按钮的父容器tr
+             再为 tr中的每一个text设置function
+             */
+            var ttr = $(this).parents("tr");
+            ttr.find('input[type="text"]').each(function () {
+                var inputVal = $(this).val();
+                $(this).parents('td').html(inputVal);
+            })
+        });
+    }
+</script>
+{% endblock %}
+{% block page-content %}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            新增用例
+        </h1>
+    </div>
+</div>
+<!-- /. ROW  -->
+<div class="row">
+    <div class="col-lg-12">
+        <form id="testcase-form" class="form-horizontal" role="form">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    基本信息
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="belong_project">所属项目</label>
+                                <div class="col-sm-9">
+                                    <select id="belong_project" name="belong_project" class="form-control">
+                                        <option value="请选择">请选择</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" for="belong_module">所属模块</label>
+                                <div class="col-sm-9">
+                                    <select id="belong_module" name="belong_module" class="form-control">
+                                        <option value="请选择">请选择</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="apiname" class="col-sm-3 control-label">接口名称</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="apiname" name="apiname"
+                                           placeholder="请输入接口名称" value={{ apiname }}>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-lg-1 control-label">url</label>
+                        <div class="col-lg-1">
+                            <select id="requestType" name="requestType" class="form-control">
+                                <option value="get" selected="selected">get</option>
+                                <option value="post">post</option>
+                                <option value="put">put</option>
+                                <option value="delete">delete</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-1">
+                            <select id="httpType" name="httpType" class="form-control">
+                                <option value="http" selected="selected">http</option>
+                                <option value="https">https</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control" id="apiAddress" name="apiAddress"
+                                   placeholder="请输入地址" value={{ apiAddress }}>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    请求头
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input type="button" value="新增" id="addHeader" class="btn btn-default">
+                            <input type="button" value="删除" id="deleteHeader" class="btn btn-default">
+                            <div class="table-responsive">
+                                <table class="table table-striped" width="100%" id="ApiHeader">
+                                    <thead>
+                                    <tr>
+                                        <th class="table-check"><input type="checkbox" id="select_header"></th>
+                                        <th>标签</th>
+                                        <th>内容</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <input type="button" value="编辑" class="btn btn-default">
+                                            <input type="button" value="确定" class="btn btn-default">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    请求参数
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" style="width: auto">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="optionsRadiosinline" id="formdata"
+                                               value="option1"
+                                               checked>表单
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="optionsRadiosinline" id="raw"
+                                               value="option2">源数据
+                                    </label>
+                                </div>
+                                <div class="panel-body" id="tableforformdata">
+                                    <input type="button" value="新增" id="addParameter" class="btn btn-default">
+                                    <input type="button" value="删除" id="deleteParameter" class="btn btn-default">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped" width="100%" id="ApiParameter">
+                                            <thead>
+                                            <tr>
+                                                <th class="table-check"><input type="checkbox" id="select_Parameter">
+                                                </th>
+                                                <th>请求参数</th>
+                                                <th>参数值</th>
+                                                <th>参数类型</th>
+                                                <th>必填</th>
+                                                <th>说明</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tr>
+                                                <td><input type="checkbox"></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td><select class="form-control">
+                                                    <option value="string" selected="selected">string</option>
+                                                    <option value="int">int</option>
+                                                </select></td>
+                                                <td><input type="radio"></td>
+                                                <td></td>
+                                                <td>
+                                                    <input type="button" value="编辑" class="btn btn-default">
+                                                    <input type="button" value="确定" class="btn btn-default">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="panel-body" style="display: none" id="textforraw">
+                                    <label>源数据</label>
+                                    <textarea class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    返回参数
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input type="button" value="新增" id="addResponse" class="btn btn-default">
+                            <input type="button" value="删除" id="deleteResponse" class="btn btn-default">
+                            <div class="table-responsive">
+                                <table class="table table-striped" width="100%" id="ApiResponse">
+                                    <thead>
+                                    <tr>
+                                        <th class="table-check"><input type="checkbox" id="select_response"></th>
+                                        <th>参数名</th>
+                                        <th>参数值</th>
+                                        <th>参数类型</th>
+                                        <th>必填</th>
+                                        <th>说明</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tr>
+                                        <td><input type="checkbox"></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><select class="form-control">
+                                            <option value="string" selected="selected">string</option>
+                                            <option value="int">int</option>
+                                        </select></td>
+                                        <td><input type="radio"></td>
+                                        <td></td>
+                                        <td>
+                                            <input type="button" value="编辑" class="btn btn-default">
+                                            <input type="button" value="确定" class="btn btn-default">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-lg-12">
+                        <div class="row">
+                        	<a type="submit" class="btn btn-primary btn-lg" name="application" href='#'>快速测试</a>
+                            <a type="submit" class="btn btn-primary btn-lg" name="application" href='#' id="save">保存</a>
+                            <a type="submit" class="btn btn-primary btn-lg" name="application" href='#'>应用</a>
+                            <a type="submit" class="btn btn-primary btn-lg" name="cancel" href='#'>取消</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block page-title %}
+Index
+{% endblock %}
+{% block script %}
+ <script type="text/javascript">
+        $(document).ready(function(){
+
+            $('#select_all').click(function () {
+                var flag=this.checked;
+                $("input[name^='module']").attr('checked',flag);
+            });
+            $('#delmodule').click(function(){
+//                var id_array=new Array();
+                $('td input[type=checkbox]').each(function () {
+                    if($(this).is(":checked")){
+//                        alert($(this).val());
+                        $.ajax({
+                            url: '/del_module/',
+                            type: 'GET',
+                            data: {'value': $(this).val()},
+                            success:function (arg) {
+                                var dict = JSON.parse(arg);
+                                if(dict.status){
+//                                    $(this).remove();
+//                                    window.location.reload()
+                                    alert("删除成功")
+                                }
+                                window.location.reload()
+                            }
+                        })
+                    }
+                })
+            })
+            $('#editmodule').click(function () {
+                if($("td input[type='checkbox']:checked").length !=1){
+                    alert('请选择一个模块进行编辑')
+                }else{
+                    eid=$("td input[type='checkbox']:checked").val()
+                    $('#editmodule').attr("href","/edit_module/"+eid+"/")
+                    
+//                    $.ajax({
+//                        url: '/add_module/',
+//                        type: 'POST',
+//                        data: {'value': $("td input[type='checkbox']:checked").val()},
+//                        success:function (arg) {
+//                            var dict = JSON.parse(arg);
+//                            if(dict.status){
+//                                window.location.href="/add_module/"
+//                            }
+//                            $('#module_name').val(dict.module_name)
+//                        }
+//                    })
+                }
+            })
+        });
+
+     </script>
+{% endblock %}
+{% block page-content %}
+
+       <div class="row">
+       		<div class="col-md-12">
+       		<div class="panel panel-default">
+       		<div class="panel-body"> 
+       			<a href="/add_module/" class="btn btn-primary"><i class="fa fa-edit"></i>新增模块</a>
+       			<a href="#" class="btn btn-primary" id='delmodule'><i class="fa fa-pencil"></i>删除模块</a>
+       			<a href="#" class="btn btn-primary" id='editmodule'><i class=" fa fa-refresh "></i>修改模块</a>
+       			</div>
+       			</div>
+        	</div>
+       </div>
+
+ 		<div class="row">
+                <div class="col-md-12">
+                      <!--    Striped Rows Table  -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            	模块列表
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped" width="100%">
+                                    <thead>
+                                        <tr>
+                                        	<th class="table-check"><input type="checkbox" id="select_all"/></th>
+                                            <th>模块名称</th>
+                                            <th>所属项目</th>
+                                            <th>测试负责人</th>
+                                            <th>简要描述</th>
+                                            <th>其他信息</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for module in modules %}
+								            <tr rowid="{{ module.id }}">
+								            	<td><input type="checkbox" name="module_{{ module.id }}" value="{{ module.id }}"/></td>
+								                <td>{{ module.module_name }}</td>
+								                <td>{{ module.belong_project.project_name }}</td>
+								                <td>{{ module.test_user }}</td>
+								                <td>{{ module.simple_desc }}</td>
+								                <td>{{ module.other_desc }}</td>
+								            </tr>
+            							{% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+{% endblock %}

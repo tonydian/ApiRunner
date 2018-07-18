@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block page-title %}
+Index
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+$(document).ready(function(){
+
+    $('#select_all').click(function () {
+        var flag=this.checked;
+        $("input[name^='project']").attr('checked',flag);
+    })
+//    alert($('input#project_id').val()=="")
+    if($('input#project_id').val()!=""){
+        $('h1').text("修改项目")
+        $('#project_from').attr('action','/edit_project/')
+    }
+
+
+});
+</script>
+{% endblock %}
+{% block page-content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="page-header">
+            新增项目
+        </h1>
+    </div>
+</div>
+<!-- /. ROW  -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <form id="project_from" class="form-horizontal" role="form" action="/add_project_action/" method="post">
+                            <div class="form-group">
+                                <label for="project_name" class="col-sm-2 control-label">项目名称</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="project_name" name="project_name"
+                                           placeholder="请输入项目名称" value={{ project_name }}>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="responsible_name" class="col-sm-2 control-label">负责人</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="responsible_name"
+                                           name="responsible_name" placeholder="请输入负责人" value={{ responsible_name }}>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="test_user" class="col-sm-2 control-label">测试人员</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="test_user" name="test_user"
+                                           placeholder="请输入测试人员" value={{ test_user }}>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="dev_user" class="col-sm-2 control-label">开发人员</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="dev_user" name="dev_user"
+                                           placeholder="请输入开发人员" value={{ dev_user }}>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="publish_app" class="col-sm-2 control-label">发布应用</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="publish_app" name="publish_app"
+                                           placeholder="请输入发布应用" value={{ publish_app }}>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="simple_desc" class="col-sm-2 control-label">简要描述</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="simple_desc" name="simple_desc"
+                                           placeholder="请输入简要描述" value={{ simple_desc }}>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="other_desc" class="col-sm-2 control-label">其他信息</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="other_desc" name="other_desc"
+                                           placeholder="其他信息" value={{ other_desc }}>
+                                </div>
+                            </div>
+                            <div class="form-group" style="visibility: hidden">
+                                <label for="project_id" class="col-sm-2 control-label">项目id</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="project_id" name="project_id"
+                                           placeholder="请输入项目id" value={{ project_id }}>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <input type="submit" class="btn btn-default" name="confirm">
+                                    <a type="submit" class="btn btn-default" name="cancel" href='/project_list/'>取消</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.col-lg-6 (nested) -->
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% endblock %}

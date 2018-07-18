@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block page-title %}
+Index
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+$(document).ready(function(){
+
+    $('#select_all').click(function () {
+        var flag=this.checked;
+        $("input[name^='project']").attr('checked',flag);
+    })
+//    alert($('input#project_id').val()=="")
+    if($('input#module_id').val()!=""){
+        $('h1').text("修改模块")
+        $('#project_from').attr('action','/edit_module/')
+    }
+
+
+});
+</script>
+{% endblock %}
+{% block page-content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="page-header">
+            新增模块
+        </h1>
+    </div>
+</div>
+<!-- /. ROW  -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <form id="project_from" class="form-horizontal" role="form" action="/add_module_action/" method="post">
+                            <div class="form-group">
+                                <label for="module_name" class="col-sm-2 control-label">模块名称</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="module_name" name="module_name"
+                                           placeholder="请输入模块名称" value={{ module_name }}>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                        		<label class="col-sm-2 control-label" for="belong_project">所属项目</label>
+                        		<div class="col-sm-10">
+                            		<select id="belong_project" name="belong_project" class="form-control">
+                                		<option value="请选择">请选择</option>
+                                			{% for project in  projects %}
+                                    			{% ifequal project belong_project %}
+                                    			<option value="{{ project.project_name }}" selected="selected">{{ project.project_name }}</option>
+                                    			{% else %}
+                                    			<option value="{{ project.project_name }}">{{ project.project_name }}</option>
+                                    			{% endifequal %}
+                                			{% endfor %}
+                            		</select>
+                        		</div>
+                    		</div> 
+                    		<div class="form-group">
+                                <label for="test_user" class="col-sm-2 control-label">测试负责人</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="test_user" name="test_user"
+                                           placeholder="请输入测试负责人" value={{ test_user }}>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="simple_desc" class="col-sm-2 control-label">简要描述</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="simple_desc" name="simple_desc"
+                                           placeholder="请输入简要描述" value={{ simple_desc }}>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="other_desc" class="col-sm-2 control-label">其他信息</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="other_desc" name="other_desc"
+                                           placeholder="请输入其他信息" value={{ other_desc }}>
+                                </div>
+                            </div>
+                            <div class="form-group" style="visibility: hidden">
+                                <label for="module_id" class="col-sm-2 control-label">模块id</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="module_id" name="module_id"
+                                           placeholder="请输入项目id" value={{ module_id }}>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <input type="submit" class="btn btn-default" name="confirm">
+                                    <a type="submit" class="btn btn-default" name="cancel" href='/module_list/'>取消</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.col-lg-6 (nested) -->
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+{% endblock %}

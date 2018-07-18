@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block page-title %}
+Index
+{% endblock %}
+{% block script %}
+ <script type="text/javascript">
+        $(document).ready(function(){
+
+            $('#select_all').click(function () {
+                var flag=this.checked;
+                $("input[name^='project']").attr('checked',flag);
+            });
+            $('#delproject').click(function(){
+//                var id_array=new Array();
+                $('td input[type=checkbox]').each(function () {
+                    if($(this).is(":checked")){
+//                        alert($(this).val());
+                        $.ajax({
+                            url: '/del_project/',
+                            type: 'GET',
+                            data: {'value': $(this).val()},
+                            success:function (arg) {
+                                var dict = JSON.parse(arg);
+                                if(dict.status){
+//                                    $(this).remove();
+//                                    window.location.reload()
+                                    alert("删除成功")
+                                }
+                                window.location.reload()
+                            }
+                        })
+                    }
+                })
+            })
+            $('#editproject').click(function () {
+                if($("td input[type='checkbox']:checked").length !=1){
+                    alert('请选择一个项目进行编辑')
+                }else{
+                    eid=$("td input[type='checkbox']:checked").val()
+                    $('#editproject').attr("href","/edit_project/"+eid+"/")
+                    
+//                    $.ajax({
+//                        url: '/add_project/',
+//                        type: 'POST',
+//                        data: {'value': $("td input[type='checkbox']:checked").val()},
+//                        success:function (arg) {
+//                            var dict = JSON.parse(arg);
+//                            if(dict.status){
+//                                window.location.href="/add_project/"
+//                            }
+//                            $('#project_name').val(dict.project_name)
+//                        }
+//                    })
+                }
+            })
+        });
+
+     </script>
+{% endblock %}
+{% block page-content %}
+
+       <div class="row">
+       		<div class="col-md-12">
+       		<div class="panel panel-default">
+       		<div class="panel-body"> 
+       			<a href="/add_project/" class="btn btn-primary"><i class="fa fa-edit"></i>新增项目</a>
+       			<a href="#" class="btn btn-primary" id='delproject'><i class="fa fa-pencil"></i>删除项目</a>
+       			<a href="#" class="btn btn-primary" id='editproject'><i class=" fa fa-refresh "></i>修改项目</a>
+       			</div>
+       			</div>
+        	</div>
+       </div>
+
+ 		<div class="row">
+                <div class="col-md-12">
+                      <!--    Striped Rows Table  -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            	项目列表
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped" width="100%">
+                                    <thead>
+                                        <tr>
+                                        	<th class="table-check"><input type="checkbox" id="select_all"/></th>
+                                            <th>项目名称</th>
+                                            <th>负责人</th>
+                                            <th>测试人员</th>
+                                            <th>开发人员</th>
+                                            <th>发布应用</th>
+                                            <th>简要描述</th>
+                                            <th>其他信息</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for project in projects %}
+								            <tr rowid="{{ project.id }}">
+								            	<td><input type="checkbox" name="project_{{ project.id }}" value="{{ project.id }}"/></td>
+								                <td>{{ project.project_name }}</td>
+								                <td>{{ project.responsible_name }}</td>
+								                <td>{{ project.test_user }}</td>
+								                <td>{{ project.dev_user }}</td>
+								                <td>{{ project.publish_app }}</td>
+								                <td>{{ project.simple_desc }}</td>
+								                <td>{{ project.other_desc }}</td>
+								            </tr>
+            							{% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+{% endblock %}
