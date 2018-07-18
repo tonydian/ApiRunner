@@ -26,7 +26,7 @@ class AddModuleForm(forms.Form):
 class AddApiInfoForm(forms.Form):
     belong_project=forms.CharField(required=False)
     belong_module=forms.CharField(required=False)
-    name=forms.CharField(required=False)
+    apiname=forms.CharField(required=False)
     httpType=forms.CharField(required=False)
     requestType=forms.CharField(required=False)
     apiAddress=forms.CharField(required=False)

@@ -52,15 +52,16 @@ def get_module(request):
 def Save_ApiInfo(request):
     if request.method =='POST':
         form=AddApiInfoForm(request.POST)
+#         print(form)
         if form.is_valid():
             belong_project = form.cleaned_data['belong_project']
             belong_module = form.cleaned_data['belong_module']
-#             name = form.cleaned_data['apiname']
+            apiname = form.cleaned_data['apiname']
             httpType = form.cleaned_data['httpType']
             requestType = form.cleaned_data['requestType']
             apiAddress = form.cleaned_data['apiAddress']
-#             requestParameterType = form.cleaned_data['optionsRadiosinline']
-#             print(requestParameterType)
+            requestParameterType = form.cleaned_data['requestParameterType']
+            print(requestParameterType)
     else:
         form=AddApiInfoForm()
     return HttpResponse(json.dumps({'status':200,'message':'success','id':1}))
