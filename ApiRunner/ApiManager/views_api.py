@@ -52,7 +52,6 @@ def get_module(request):
 def Save_ApiInfo(request):
     if request.method =='POST':
         form=AddApiInfoForm(request.POST)
-#         print(form)
         if form.is_valid():
             belong_project = form.cleaned_data['belong_project']
             belong_module = form.cleaned_data['belong_module']
