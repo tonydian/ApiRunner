@@ -161,13 +161,22 @@ Index
                data:$("#testcase-form").serialize(),
                dataType:"json",
                success:function () {
-                   
+            	   
+            	   getTableData('ApiHeader')
                }
 
            })
        })
 
     });
+    function getTableData(TableId){
+    	$('#'+TableId+' tr').each(function(){
+    		var tdArr=$(this).children();
+    		var name=tdArr.eq(1).text();
+    		var value=tdArr.eq(2).text();
+    		alert(name+':'+value)
+    	})
+    }
 
 
     function edit() {
