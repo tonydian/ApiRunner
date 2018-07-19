@@ -4,7 +4,7 @@ Created on 2018年7月13日
 @author: Administrator
 '''
 import json
-from ApiManager.models import ProjectInfo,ModuleInfo
+from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo
 from ApiManager.forms import AddApiInfoForm
 from django.http import HttpResponse
 
@@ -60,7 +60,14 @@ def Save_ApiInfo(request):
             requestType = form.cleaned_data['requestType']
             apiAddress = form.cleaned_data['apiAddress']
             requestParameterType = form.cleaned_data['requestParameterType']
-            print(requestParameterType)
+            project_id=ProjectInfo.objects.filter(project_name=belong_project).values('id')[0]['id']
+            module_id=ModuleInfo.objects.filter(module_name=belong_module).values('id')[0]['id']
+            if requestParameterType=="option1":
+                requestParameterTypeName="form-data"
+            else:
+                requestParameterTypeName="raw"
+            ApiInfo.objects.create(name=apiname,httpType=httpType,requestType=requestType,apiAddress=apiAddress,requestParameterType=requestParameterTypeName,belong_project_id=project_id,belong_module_id=module_id)
+            
     else:
         form=AddApiInfoForm()
     return HttpResponse(json.dumps({'status':200,'message':'success','id':1}))
