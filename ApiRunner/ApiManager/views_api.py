@@ -97,19 +97,20 @@ def Save_ApiHeader(request):
 
 def Save_ApiParameter(request):
     if request.method =='POST':
-        
-        form=AddApiParameter(request.POST)
-        print(form)
-        if form.is_valid():
-            api_id=form.cleaned_data['api_id']
-            name=form.cleaned_data['name']
-            value=form.cleaned_data['value']
-            type=form.cleaned_data['type']
-            required=form.cleaned_data['required']
-            description=form.cleaned_data['description']
-        else:
-            form=AddApiInfoForm()
-    return HttpResponse(json.dumps({'status':200}))
+        requestParameterTypeName=request.POST.get('requestParameterTypeName')
+        if(requestParameterTypeName=='form-data'):
+            form=AddApiParameter(request.POST)
+            print(form)
+            if form.is_valid():
+                api_id=form.cleaned_data['api_id']
+                name=form.cleaned_data['name']
+                value=form.cleaned_data['value']
+                type=form.cleaned_data['type']
+                required=form.cleaned_data['required']
+                description=form.cleaned_data['description']
+            else:
+                form=AddApiInfoForm()
+        return HttpResponse(json.dumps({'status':200}))
 
 
                 
