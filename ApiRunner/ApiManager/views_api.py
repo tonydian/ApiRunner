@@ -4,8 +4,8 @@ Created on 2018年7月13日
 @author: Administrator
 '''
 import json
-from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo
-from ApiManager.forms import AddApiInfoForm
+from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter
+from ApiManager.forms import AddApiInfoForm,AddApiHead,AddApiParameter
 from django.http import HttpResponse
 
 def get_project(request):
@@ -49,7 +49,17 @@ def get_module(request):
                 module_list.append(module)
         return HttpResponse(json.dumps({'status':200,'message':'success','value':module_list}))
     
+def Check_ApiName(request):
+    if request.method=='POST':
+        apiname=request.POST.get('apiname')
+        results=ApiInfo.objects.filter(name=apiname)
+        if results:
+            return HttpResponse(json.dumps({'status':True}))
+        else:
+            return HttpResponse(json.dumps({'status':False}))
+    
 def Save_ApiInfo(request):
+    #后续要补上不允许api名字相同
     if request.method =='POST':
         form=AddApiInfoForm(request.POST)
         if form.is_valid():
@@ -67,10 +77,41 @@ def Save_ApiInfo(request):
             else:
                 requestParameterTypeName="raw"
             ApiInfo.objects.create(name=apiname,httpType=httpType,requestType=requestType,apiAddress=apiAddress,requestParameterType=requestParameterTypeName,belong_project_id=project_id,belong_module_id=module_id)
-            
+            Api_id=ApiInfo.objects.filter(name=apiname).values('id')[0]['id']
     else:
         form=AddApiInfoForm()
-    return HttpResponse(json.dumps({'status':200,'message':'success','id':1}))
+    return HttpResponse(json.dumps({'status':200,'message':'success','id':Api_id,'requestParameterTypeName':requestParameterTypeName}))
+
+def Save_ApiHeader(request):
+    if request.method =='POST':
+        form=AddApiHead(request.POST)
+        print(form)
+        if form.is_valid():
+            api_id=form.cleaned_data['api_id']
+            name=form.cleaned_data['name']
+            value=form.cleaned_data['value']
+            ApiHead.objects.create(belong_Api_id=api_id,name=name,value=value)
+    else:
+        form=AddApiInfoForm()
+    return HttpResponse(json.dumps({'status':200}))
+
+def Save_ApiParameter(request):
+    if request.method =='POST':
+        
+        form=AddApiParameter(request.POST)
+        print(form)
+        if form.is_valid():
+            api_id=form.cleaned_data['api_id']
+            name=form.cleaned_data['name']
+            value=form.cleaned_data['value']
+            type=form.cleaned_data['type']
+            required=form.cleaned_data['required']
+            description=form.cleaned_data['description']
+        else:
+            form=AddApiInfoForm()
+    return HttpResponse(json.dumps({'status':200}))
+
+
                 
     
     

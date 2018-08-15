@@ -160,22 +160,72 @@ Index
                type:'POST',
                data:$("#testcase-form").serialize(),
                dataType:"json",
-               success:function () {
-            	   
-            	   getTableData('ApiHeader')
+               success:function (data) {
+            	   SaveApiHeaderData('ApiHeader',data.id,'/api/Save_ApiHeader/')
+            	   SaveApiParameter('ApiParameter',data.id,data.requestParameterTypeName,'/api/Save_ApiParameter/')
                }
 
            })
        })
+       
+       $('#apiname').blur(function(){
+    	   var value=$(this).val();
+    	   $.ajax({
+    		   url:'/api/Check_ApiName/',
+    		   type:'POST',
+    		   data:{'apiname':value},
+    		   dataType:"json",
+    		   success:function(data){
+    			   if(data.status){
+    				   alert("你的api名字与已有的相同,请重新输入")
+    			   }
+    		   }
+    	   })
+       })
 
     });
-    function getTableData(TableId){
+    function SaveApiHeaderData(TableId,id,url){
     	$('#'+TableId+' tr').each(function(){
     		var tdArr=$(this).children();
     		var name=tdArr.eq(1).text();
     		var value=tdArr.eq(2).text();
-    		alert(name+':'+value)
+    		if(name!=''&& value!=''&&name!="标签"){
+    			$.ajax({
+    				url:url,
+                    type:'POST',
+                    data:{'api_id':id,'name':name,'value':value},
+                    dataType:"json",
+                    success:function () {
+
+                    }
+    			});
+    		}
     	})
+    }
+    function SaveApiParameter(TableId,id,requestParameterTypeName,url){
+    	if(requestParameterTypeName=='form-data'){
+    		$('#'+TableId+'tr').each(function(){
+    			var tdArr=$(this).children();
+        		var name=tdArr.eq(1).text();
+        		var value=tdArr.eq(2).text();
+        		var type=tdArr.eq(3).text();
+        		var required=tdArr.eq(4).text();
+        		var description=tdArr.eq(5).text();
+        		if(name!=''&& value!=''&&name!="请求参数"){
+        			$.ajax({
+        				url:url,
+                        type:'POST',
+                        data:{'api_id':id,'name':name,'value':value,'type':type,'required':required,'description':description,'requestParameterTypeName':requestParameterTypeName},
+                        dataType:"json",
+                        success:function () {
+
+                        }
+        			});
+        		}
+    		})
+    	}else{
+    		
+    	}
     }
 
 
