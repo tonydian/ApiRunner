@@ -102,7 +102,7 @@ def Save_ApiParameter(request):
             form=AddApiParameter(request.POST)
             print(form)
             if form.is_valid():
-                api_id=form.cleaned_data['api_id']
+                api_id=form.cleaned_data['belong_Api']
                 name=form.cleaned_data['name']
                 value=form.cleaned_data['value']
                 type=form.cleaned_data['type']
