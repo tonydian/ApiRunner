@@ -209,7 +209,7 @@ Index
         		var name=tdArr.eq(1).text();
         		var value=tdArr.eq(2).text();
         		var type=tdArr.eq(3).find("option:selected").text();
-        		var required=tdArr.eq(4).checked;
+        		var required=tdArr.eq(4).children().prop("checked");
         		var description=tdArr.eq(5).text();
         		alert(required)
         		if(name!=''&& value!=''&&name!="请求参数"){
@@ -225,9 +225,11 @@ Index
         		}
     		})
     	}else{
-    		
+    		alert("实现中")
     	}
     }
+    
+    
 
 
     function edit() {
