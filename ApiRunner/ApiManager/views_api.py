@@ -4,8 +4,8 @@ Created on 2018年7月13日
 @author: Administrator
 '''
 import json
-from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter
-from ApiManager.forms import AddApiInfoForm,AddApiHead,AddApiParameter
+from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter,ApiResponse
+from ApiManager.forms import AddApiInfoForm,AddApiHead,AddApiParameter,AddApiResponse
 from django.http import HttpResponse
 
 def get_project(request):
@@ -100,19 +100,35 @@ def Save_ApiParameter(request):
         requestParameterTypeName=request.POST.get('requestParameterTypeName')
         if(requestParameterTypeName=='form-data'):
             form=AddApiParameter(request.POST)
-            print(form)
             if form.is_valid():
                 api_id=form.cleaned_data['belong_Api']
                 name=form.cleaned_data['name']
                 value=form.cleaned_data['value']
                 type=form.cleaned_data['type']
                 required=form.cleaned_data['required']
-                description=form.cleaned_data['description']
-                
+                description=form.cleaned_data['description']   
             else:
-                form=AddApiInfoForm()
+                form=AddApiParameter()
+        else:
+            pass
         return HttpResponse(json.dumps({'status':200}))
-
+    
+    
+def Save_ApiResponse(request):
+    if request.method=='POST':
+        form=AddApiResponse(request.POST)
+        print(form)
+        if form.is_valid():
+            api_id=form.cleaned_data['belong_Api']
+            name=form.cleaned_data['name']
+            value=form.cleaned_data['value']
+            type=form.cleaned_data['type']
+            required=form.cleaned_data['required']
+            description=form.cleaned_data['description']
+        else:
+            form=AddApiResponse()
+        return HttpResponse(json.dumps({'status':200}))
+        
 
                 
     

@@ -45,3 +45,12 @@ class AddApiParameter(forms.Form):
     value = forms.CharField()
     required = forms.BooleanField()
     description = forms.CharField()
+    
+class AddApiResponse(forms.Form):
+    belong_Api = forms.CharField()
+    name = forms.CharField()
+    type = forms.CharField()
+    value = forms.CharField()
+    required = forms.BooleanField()
+    description = forms.CharField()
+    

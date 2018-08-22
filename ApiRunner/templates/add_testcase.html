@@ -163,6 +163,8 @@ Index
                success:function (data) {
             	   SaveApiHeaderData('ApiHeader',data.id,'/api/Save_ApiHeader/')
             	   SaveApiParameter('ApiParameter',data.id,data.requestParameterTypeName,'/api/Save_ApiParameter/')
+            	   SaveApiResponse('ApiResponse',data.id,'/api/Save_ApiResponse/')
+            	   
                }
 
            })
@@ -211,7 +213,6 @@ Index
         		var type=tdArr.eq(3).find("option:selected").text();
         		var required=tdArr.eq(4).children().prop("checked");
         		var description=tdArr.eq(5).text();
-        		alert(required)
         		if(name!=''&& value!=''&&name!="请求参数"){
         			$.ajax({
         				url:url,
@@ -225,10 +226,32 @@ Index
         		}
     		})
     	}else{
-    		alert("实现中")
+    		var data=$('#textforraw .form-control').val()
+    		$.ajax
+    		
     	}
     }
-    
+    function SaveApiResponse(TableId,id,url){
+    	$('#'+TableId+' tr').each(function(){
+			var tdArr=$(this).children();
+    		var name=tdArr.eq(1).text();
+    		var value=tdArr.eq(2).text();
+    		var type=tdArr.eq(3).find("option:selected").text();
+    		var required=tdArr.eq(4).children().prop("checked");
+    		var description=tdArr.eq(5).text();
+    		if(name!=''&& value!=''&&name!="参数名"){
+    			$.ajax({
+    				url:url,
+                    type:'POST',
+                    data:{'belong_Api':id,'name':name,'value':value,'type':type,'required':required,'description':description},
+                    dataType:"json",
+                    success:function () {
+
+                    }
+    			});
+    		}
+		})
+    }
     
 
 

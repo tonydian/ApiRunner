@@ -137,6 +137,7 @@ class ApiResponse(models.Model):
     value = models.CharField('参数值',max_length=1024, blank=True, null=True)
     required = models.BooleanField("是否必填",default=True)
     description = models.CharField("描述",max_length=1024, blank=True,null=True)
+    
 
 
     
