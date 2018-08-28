@@ -117,7 +117,7 @@ class ApiParameter(models.Model):
     name = models.CharField("参数名",max_length=1024)
     type = models.CharField('参数类型',default="String", max_length=1024, choices=(('Int', 'Int'), ('String', 'String')))
     value = models.CharField('参数值',max_length=1024, blank=True, null=True)
-    required = models.BooleanField("是否必填",default=True)
+    required = models.BooleanField("是否必填",default=False)
     description = models.CharField("描述",max_length=1024, blank=True,null=True)
     
 class ApiParameterRaw(models.Model):
@@ -135,7 +135,7 @@ class ApiResponse(models.Model):
     name = models.CharField("参数名",max_length=1024,null=False)
     type = models.CharField('参数类型',default="String", max_length=1024, choices=(('Int', 'Int'), ('String', 'String')))
     value = models.CharField('参数值',max_length=1024, blank=True, null=True)
-    required = models.BooleanField("是否必填",default=True)
+    required = models.BooleanField("是否必填",default=False)
     description = models.CharField("描述",max_length=1024, blank=True,null=True)
     
 

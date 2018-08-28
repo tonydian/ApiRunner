@@ -4,8 +4,8 @@ Created on 2018年7月13日
 @author: Administrator
 '''
 import json
-from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter,ApiResponse
-from ApiManager.forms import AddApiInfoForm,AddApiHead,AddApiParameter,AddApiResponse
+from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
+from ApiManager.forms import AddApiInfoForm,AddApiHead,AddApiParameter,AddApiResponse,AddApiParameter_raw
 from django.http import HttpResponse
 
 def get_project(request):
@@ -85,7 +85,7 @@ def Save_ApiInfo(request):
 def Save_ApiHeader(request):
     if request.method =='POST':
         form=AddApiHead(request.POST)
-        print(form)
+        
         if form.is_valid():
             api_id=form.cleaned_data['api_id']
             name=form.cleaned_data['name']
@@ -99,32 +99,52 @@ def Save_ApiParameter(request):
     if request.method =='POST':
         requestParameterTypeName=request.POST.get('requestParameterTypeName')
         if(requestParameterTypeName=='form-data'):
+            required=request.POST.get('required')
+            if(required=='false'):
+                required=False
+            else:
+                required=True
+            
             form=AddApiParameter(request.POST)
+            
             if form.is_valid():
                 api_id=form.cleaned_data['belong_Api']
                 name=form.cleaned_data['name']
                 value=form.cleaned_data['value']
                 type=form.cleaned_data['type']
-                required=form.cleaned_data['required']
-                description=form.cleaned_data['description']   
+                description=form.cleaned_data['description'] 
+                ApiParameter.objects.create(belong_Api_id=api_id,name=name,type=type,value=value,required=required,description=description)
             else:
                 form=AddApiParameter()
         else:
-            pass
+            form=AddApiParameter_raw(request.POST)
+            if form.is_valid():
+                api_id=form.cleaned_data['belong_Api']
+                data=form.cleaned_data['data']
+                ApiParameterRaw.objects.create(belong_Api_id=api_id,data=data)
+            else:
+                form=AddApiParameter_raw()
         return HttpResponse(json.dumps({'status':200}))
     
     
 def Save_ApiResponse(request):
     if request.method=='POST':
         form=AddApiResponse(request.POST)
+        required=request.POST.get('required')
+        if(required=='false'):
+                required=False
+        else:
+            required=True
         print(form)
         if form.is_valid():
             api_id=form.cleaned_data['belong_Api']
             name=form.cleaned_data['name']
             value=form.cleaned_data['value']
             type=form.cleaned_data['type']
-            required=form.cleaned_data['required']
             description=form.cleaned_data['description']
+            
+            ApiResponse.objects.create(belong_Api_id=api_id,name=name,type=type,value=value,required=required,description=description)
+            
         else:
             form=AddApiResponse()
         return HttpResponse(json.dumps({'status':200}))

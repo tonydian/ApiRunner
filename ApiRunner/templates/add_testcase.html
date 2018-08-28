@@ -227,7 +227,15 @@ Index
     		})
     	}else{
     		var data=$('#textforraw .form-control').val()
-    		$.ajax
+    		$.ajax({
+    			url:url,
+    			type:'POST',
+    			data:{'belong_Api':id,'data':data},
+    			dataType:"json",
+    			success:function(){
+    				
+    			}
+    		})
     		
     	}
     }
