@@ -3,7 +3,12 @@ Created on 2018年7月16日
 
 @author: Administrator
 '''
-class readDb():
+import requests
+def getDb():
     pass
-class testApi():
-    pass
+def RunTestCase(httpType,requestType,apiAddress,requestParameterType,header,Parameter):
+    url=httpType+'://'+apiAddress
+    if requestType=='get':
+        
+        
+    

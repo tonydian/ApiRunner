@@ -1,6 +1,6 @@
 from django.shortcuts import render,get_object_or_404
 from django.shortcuts import HttpResponse
-from ApiManager.models import ProjectInfo,ModuleInfo
+from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo
 import requests
 import json
 from .forms import AddProjectForm,AddModuleForm
@@ -143,8 +143,22 @@ def edit_module(request):
         form=AddModuleForm()
     return HttpResponseRedirect('/module_list/')
 
+def testcase_list(request):
+    testcase_list=ApiInfo.objects.all().select_related('belong_project','belong_module')
+    return render(request,'testcase_list.html',{'testcase_list':testcase_list})
+
+
 def add_testcase_page(request):
     return render(request,'add_testcase.html')
+
+def del_testcase(request):
+    ret={'status':True}
+    try:
+        nid=request.GET.get('value')
+        ApiInfo.objects.filter(id=nid).delete()
+    except Exception as e:
+        ret['status']=False
+    return HttpResponse(json.dumps(ret))
             
         
     
