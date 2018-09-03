@@ -106,7 +106,6 @@ def Save_ApiParameter(request):
                 required=True
             
             form=AddApiParameter(request.POST)
-            
             if form.is_valid():
                 api_id=form.cleaned_data['belong_Api']
                 name=form.cleaned_data['name']
