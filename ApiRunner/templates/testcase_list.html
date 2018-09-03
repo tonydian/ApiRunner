@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block page-title %}
+Index
+{% endblock %}
+{% block script %}
+ <script type="text/javascript">
+        $(document).ready(function(){
+
+            $('#select_all').click(function () {
+                var flag=this.checked;
+                $("input[name^='testcase']").attr('checked',flag);
+            });
+            $('#deltestcase').click(function(){
+//                var id_array=new Array();
+                $('td input[type=checkbox]').each(function () {
+                    if($(this).is(":checked")){
+//                        alert($(this).val());
+                        $.ajax({
+                            url: '/del_testcase/',
+                            type: 'GET',
+                            data: {'value': $(this).val()},
+                            success:function (arg) {
+                                var dict = JSON.parse(arg);
+                                if(dict.status){
+//                                    $(this).remove();
+//                                    window.location.reload()
+                                    alert("删除成功")
+                                }
+                                window.location.reload()
+                            }
+                        })
+                    }
+                })
+            })
+            $('#edittestcase').click(function () {
+                if($("td input[type='checkbox']:checked").length !=1){
+                    alert('请选择一个用例进行编辑')
+                }else{
+                    eid=$("td input[type='checkbox']:checked").val()
+                    $('#edittestcase').attr("href","/edit_testcase/"+eid+"/")
+                    
+//                    $.ajax({
+//                        url: '/add_testcase/',
+//                        type: 'POST',
+//                        data: {'value': $("td input[type='checkbox']:checked").val()},
+//                        success:function (arg) {
+//                            var dict = JSON.parse(arg);
+//                            if(dict.status){
+//                                window.location.href="/add_testcase/"
+//                            }
+//                            $('#testcase_name').val(dict.testcase_name)
+//                        }
+//                    })
+                }
+            })
+        });
+
+     </script>
+{% endblock %}
+{% block page-content %}
+
+       <div class="row">
+       		<div class="col-md-12">
+       		<div class="panel panel-default">
+       		<div class="panel-body"> 
+       			<a href="/add_testcase/" class="btn btn-primary"><i class="fa fa-edit"></i>新增用例</a>
+       			<a href="#" class="btn btn-primary" id='deltestcase'><i class="fa fa-pencil"></i>删除用例</a>
+       			<a href="#" class="btn btn-primary" id='edittestcase'><i class=" fa fa-refresh "></i>修改用例</a>
+       			</div>
+       			</div>
+        	</div>
+       </div>
+
+ 		<div class="row">
+                <div class="col-md-12">
+                      <!--    Striped Rows Table  -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            	用例列表
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped" width="100%">
+                                    <thead>
+                                        <tr>
+                                        	<th class="table-check"><input type="checkbox" id="select_all"/></th>
+                                            <th>用例名称</th>
+                                            <th>所属项目</th>
+                                			<th>所属模块</th>
+                                            <th>HttpType</th>
+                                            <th>RequestType</th>
+                                            <th>简要描述</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for testcase in testcase_list %}
+								            <tr rowid="{{ testcase.id }}">
+								            	<td><input type="checkbox" name="testcase_{{ testcase.id }}" value="{{ testcase.id }}"/></td>
+								                <td>{{ testcase.name }}</td>
+								                <td>{{ testcase.belong_project.project_name }}</td>
+								                <td>{{ testcase.belong_module.module_name }}</td>
+								                <td>{{ testcase.httpType }}</td>
+								                <td>{{ testcase.requestType }}</td>
+								                <td>{{ testcase.description }}</td>
+								            </tr>
+            							{% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+{% endblock %}

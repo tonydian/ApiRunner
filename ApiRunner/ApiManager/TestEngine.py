@@ -4,6 +4,7 @@ Created on 2018年7月16日
 @author: Administrator
 '''
 import requests
+import unittest
 def getDb():
     pass
 def RunTestCase(httpType,requestType,apiAddress,requestParameterType,header,Parameter):
