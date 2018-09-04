@@ -43,7 +43,7 @@ class AddApiParameter(forms.Form):
     name = forms.CharField()
     type = forms.CharField()
     value = forms.CharField()
-    description = forms.CharField()
+    description = forms.CharField(required=False)
 
 class AddApiParameter_raw(forms.Form):
     belong_Api = forms.CharField()
@@ -54,5 +54,5 @@ class AddApiResponse(forms.Form):
     name = forms.CharField()
     type = forms.CharField()
     value = forms.CharField()
-    description = forms.CharField()
+    description = forms.CharField(required=False)
     

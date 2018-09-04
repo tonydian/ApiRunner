@@ -13,5 +13,6 @@ urlpatterns = [
     path(r'Save_ApiHeader/',views_api.Save_ApiHeader,name='Save_ApiHeader'),
     path(r'Check_ApiName/',views_api.Check_ApiName,name='Check_ApiName'),
     path(r'Save_ApiParameter/',views_api.Save_ApiParameter,name='Save_ApiParameter'),
-    path(r'Save_ApiResponse/',views_api.Save_ApiResponse,name='Save_ApiResponse')
+    path(r'Save_ApiResponse/',views_api.Save_ApiResponse,name='Save_ApiResponse'),
+    path(r'run_testcase/',views_api.run_testcase,name='run_testcase')
 ]

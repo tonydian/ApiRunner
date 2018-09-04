@@ -32,6 +32,21 @@ Index
                     }
                 })
             })
+            $('#runtestcase').click(function(){
+            	if($("td input[type='checkbox']:checked").length !=1){
+                    alert('暂时只支持一个用例允许')
+            	}else{
+            		eid=$("td input[type='checkbox']:checked").val()
+            		$.ajax({
+            			url:'/api/run_testcase/',
+            			type: 'GET',
+            			data:{'CaseId':eid},
+            			success:function(arg){
+            				
+            			}
+            		})
+            	}    
+            })
             $('#edittestcase').click(function () {
                 if($("td input[type='checkbox']:checked").length !=1){
                     alert('请选择一个用例进行编辑')
@@ -66,6 +81,7 @@ Index
        			<a href="/add_testcase/" class="btn btn-primary"><i class="fa fa-edit"></i>新增用例</a>
        			<a href="#" class="btn btn-primary" id='deltestcase'><i class="fa fa-pencil"></i>删除用例</a>
        			<a href="#" class="btn btn-primary" id='edittestcase'><i class=" fa fa-refresh "></i>修改用例</a>
+       			<a href="#" class="btn btn-primary" id='runtestcase'><i class=" fa fa-glass"></i>执行用例</a>
        			</div>
        			</div>
         	</div>

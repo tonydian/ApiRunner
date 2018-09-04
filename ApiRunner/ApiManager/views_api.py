@@ -7,7 +7,7 @@ import json
 from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
 from ApiManager.forms import AddApiInfoForm,AddApiHead,AddApiParameter,AddApiResponse,AddApiParameter_raw
 from django.http import HttpResponse
-
+from ApiManager.TestEngine import RunTestCase
 def get_project(request):
     project_list=[]
     try:
@@ -147,6 +147,15 @@ def Save_ApiResponse(request):
         else:
             form=AddApiResponse()
         return HttpResponse(json.dumps({'status':200}))
+    
+def run_testcase(request):
+    if request.method=='GET':
+        eid=request.GET.get('CaseId')
+        RunTestCase(eid)
+    return HttpResponse(json.dumps({'status':200})) 
+    
+    
+
         
 
                 
