@@ -34,7 +34,7 @@ Index
             })
             $('#runtestcase').click(function(){
             	if($("td input[type='checkbox']:checked").length !=1){
-                    alert('暂时只支持一个用例允许')
+                    alert('暂时只支持一个用例执行')
             	}else{
             		eid=$("td input[type='checkbox']:checked").val()
             		$.ajax({
@@ -42,6 +42,8 @@ Index
             			type: 'GET',
             			data:{'CaseId':eid},
             			success:function(arg){
+            				var dict = JSON.parse(arg);
+            				alert(dict.result)
             				
             			}
             		})
@@ -54,18 +56,7 @@ Index
                     eid=$("td input[type='checkbox']:checked").val()
                     $('#edittestcase').attr("href","/edit_testcase/"+eid+"/")
                     
-//                    $.ajax({
-//                        url: '/add_testcase/',
-//                        type: 'POST',
-//                        data: {'value': $("td input[type='checkbox']:checked").val()},
-//                        success:function (arg) {
-//                            var dict = JSON.parse(arg);
-//                            if(dict.status){
-//                                window.location.href="/add_testcase/"
-//                            }
-//                            $('#testcase_name').val(dict.testcase_name)
-//                        }
-//                    })
+
                 }
             })
         });

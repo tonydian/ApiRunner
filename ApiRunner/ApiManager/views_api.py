@@ -131,7 +131,7 @@ def Save_ApiResponse(request):
         form=AddApiResponse(request.POST)
         required=request.POST.get('required')
         if(required=='false'):
-                required=False
+            required=False
         else:
             required=True
         print(form)
@@ -151,8 +151,7 @@ def Save_ApiResponse(request):
 def run_testcase(request):
     if request.method=='GET':
         eid=request.GET.get('CaseId')
-        RunTestCase(eid)
-    return HttpResponse(json.dumps({'status':200})) 
+    return HttpResponse(RunTestCase(eid))
     
     
 

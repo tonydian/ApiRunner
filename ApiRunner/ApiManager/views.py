@@ -1,11 +1,11 @@
 from django.shortcuts import render,get_object_or_404
 from django.shortcuts import HttpResponse
-from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo
+from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
 import requests
 import json
 from .forms import AddProjectForm,AddModuleForm
 from django.http.response import HttpResponseRedirect
-
+from ApiManager.TestEngine import getDb
 
 # Create your views here.
 def index(request):
@@ -148,8 +148,23 @@ def testcase_list(request):
     return render(request,'testcase_list.html',{'testcase_list':testcase_list})
 
 
-def add_testcase_page(request):
-    return render(request,'add_testcase.html')
+def add_testcase_page(request,eid=0):
+    if eid!=0:
+        CaseMessage=getDb(eid)
+        info=CaseMessage.getApiInfo()
+        headers=CaseMessage.getApiHeader()
+        Parameter=CaseMessage.getApiParameter()
+        ParameterRaw=CaseMessage.getApiParameterRaw()
+        Response=CaseMessage.getApiResponse()
+        results={}
+        results['info']=info
+        results['headers']=headers
+        results['Parameter']=Parameter
+        results['ParameterRaw']=ParameterRaw
+        results['Response']=Response
+        return render(request,'add_testcase.html',{'results':results})
+    else:
+        return render(request,'add_testcase.html')
 
 def del_testcase(request):
     ret={'status':True}

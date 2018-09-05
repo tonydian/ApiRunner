@@ -5,7 +5,8 @@ Created on 2018年7月16日
 '''
 import requests
 import unittest
-from ApiManager.models import ApiInfo,ApiHead,ApiParameter,ApiResponse
+import json
+from ApiManager.models import ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
 class getDb():
     def __init__(self,api_id):
         self.api_id=api_id
@@ -44,6 +45,16 @@ class getDb():
         else:
             return {}
         
+    def getApiParameterRaw(self):
+        results=ApiParameterRaw.objects.filter(belong_Api_id=self.api_id)
+        ParameterRaw={}
+        if results:
+            for item in results:
+                ParameterRaw['data']=item.data
+            return Parameter
+        else:
+            return {}
+        
     def getApiResponse(self):
         results=ApiResponse.objects.filter(belong_Api_id=self.api_id)
         Response={}
@@ -53,9 +64,6 @@ class getDb():
             return Response
         else:
             return {}
-        
-        
-        
 
 
 def RunTestCase(api_id):
@@ -64,17 +72,20 @@ def RunTestCase(api_id):
     headers=DbData.getApiHeader()
     Parameter=DbData.getApiParameter()
     Response=DbData.getApiResponse()
-    run(info['httpType'],info['requestType'],info['apiAddress'],info['requestParameterType'],headers,Parameter,Response)
-    
-    
+    return run(info['httpType'],info['requestType'],info['apiAddress'],info['requestParameterType'],headers,Parameter,Response)
     
     
 def run(httpType,requestType,apiAddress,requestParameterType,headers,Parameter,Response):
     url=httpType+'://'+apiAddress
     if requestType=='get':
         r=requests.get(url,params=Parameter,headers=headers)
+        status={'result':'success'}
         for item,key in Response.items():
-            print(str(r.json()[item]))
-            print(key)
+            if str(r.json()[item])!=key:
+                status['result']='false'
+                break
+        response=r.json()
+        response['result']=status['result']
+        return json.dumps(response)
         
     
