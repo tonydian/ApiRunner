@@ -153,6 +153,22 @@ Index
                 }
             });
         })
+        if($("#belong_project").find("option:selected").text()!='请选择'){
+            $('#belong_module').empty()
+            var checkText = $("#belong_project").find("option:selected").text();
+            $.ajax({
+                url: '/api/get_module/',
+                type: 'POST',
+                dataType: "json",
+                data: {'project_name': $("#belong_project").find("option:selected").text()},
+                success: function (module_list) {
+                    $.each(module_list.value, function (index, value) {
+                        option = $('<option value="' + value.module_name + '">' + value.module_name + '</option>')
+                        option.appendTo($('#belong_module'))
+                    })
+                }
+            });
+        }
         
        $('#save').click(function () {
            $.ajax({
@@ -185,6 +201,12 @@ Index
     	   })
        })
 
+        if($('input#testcase_id').val()!=""){
+            $('h1').text("修改用例")
+
+        }
+
+
     });
     function SaveApiHeaderData(TableId,id,url){
     	$('#'+TableId+' tr').each(function(){
@@ -204,6 +226,7 @@ Index
     		}
     	})
     }
+
     function SaveApiParameter(TableId,id,requestParameterTypeName,url){
     	if(requestParameterTypeName=='form-data'){
     		$('#'+TableId+' tr').each(function(){
@@ -239,6 +262,7 @@ Index
     		
     	}
     }
+
     function SaveApiResponse(TableId,id,url){
     	$('#'+TableId+' tr').each(function(){
 			var tdArr=$(this).children();
@@ -260,8 +284,6 @@ Index
     		}
 		})
     }
-    
-
 
     function edit() {
         $('input[value="编辑"]').click(function () {
@@ -321,14 +343,16 @@ Index
             })
         });
     }
+
 </script>
 {% endblock %}
 {% block page-content %}
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">
+        <h1 class="page-header" style="display: inline-block">
             新增用例
         </h1>
+        <input type="text" style="display: inline-block;visibility: hidden" id="testcase_id" value= {{ results.info.id }}></input>
     </div>
 </div>
 <!-- /. ROW  -->
@@ -346,8 +370,11 @@ Index
                                 <label class="col-sm-3 control-label" for="belong_project">所属项目</label>
                                 <div class="col-sm-9">
                                     <select id="belong_project" name="belong_project" class="form-control">
-                                        <option value="请选择">请选择</option>
-
+                                    	{% if results != Empty %}
+                                    	<option value={{ results.info.belong_project }} selected="selected " disabled="disabled"  style='display: none'>{{ results.info.belong_project }}</option>
+                                    	{% else %}
+                                        <option value="请选择" disabled="disabled"  style='display: none' selected="selected">请选择</option>
+                                        {% endif %}
                                     </select>
                                 </div>
                             </div>
@@ -357,8 +384,11 @@ Index
                                 <label class="col-sm-3 control-label" for="belong_module">所属模块</label>
                                 <div class="col-sm-9">
                                     <select id="belong_module" name="belong_module" class="form-control">
-                                        <option value="请选择">请选择</option>
-
+                                        {% if results != Empty %}
+                                        <option value={{ results.info.belong_module }} selected="selected " disabled="disabled"  style='display: none'>{{ results.info.belong_module }}</option>
+                                        {% else %}
+                                        <option value="请选择" disabled="disabled"  style='display: none' selected="selected">请选择</option>
+                                        {% endif %}
                                     </select>
                                 </div>
                             </div>
@@ -368,7 +398,7 @@ Index
                                 <label for="apiname" class="col-sm-3 control-label">接口名称</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" id="apiname" name="apiname"
-                                           placeholder="请输入接口名称" value={{ apiname }}>
+                                           placeholder="请输入接口名称" value={{ results.info.name }}>
                                 </div>
                             </div>
                         </div>
@@ -377,21 +407,35 @@ Index
                         <label class="col-lg-1 control-label">url</label>
                         <div class="col-lg-1">
                             <select id="requestType" name="requestType" class="form-control">
+                                {% if results != Empty %}
+                                <option value={{ results.info.requestType }} selected="selected " disabled="disabled"  style='display: none'>{{ results.info.requestType }}</option>
+                                <option value="get">get</option>
+                                <option value="post">post</option>
+                                <option value="put">put</option>
+                                <option value="delete">delete</option>
+                                {% else %}
                                 <option value="get" selected="selected">get</option>
                                 <option value="post">post</option>
                                 <option value="put">put</option>
                                 <option value="delete">delete</option>
+                                {% endif %}
                             </select>
                         </div>
                         <div class="col-lg-1">
                             <select id="httpType" name="httpType" class="form-control">
+                                {% if results != Empty %}
+                                <option value={{ results.info.httpType }} selected="selected " disabled="disabled"  style='display: none'>{{ results.info.httpType }}</option>
+                                <option value="http">http</option>
+                                <option value="https">https</option>
+                                {% else %}
                                 <option value="http" selected="selected">http</option>
                                 <option value="https">https</option>
+                                {% endif %}
                             </select>
                         </div>
                         <div class="col-lg-9">
                             <input type="text" class="form-control" id="apiAddress" name="apiAddress"
-                                   placeholder="请输入地址" value={{ apiAddress }}>
+                                   placeholder="请输入地址" value={{ results.info.apiAddress }}>
                         </div>
                     </div>
                 </div>

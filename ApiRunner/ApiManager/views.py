@@ -162,6 +162,7 @@ def add_testcase_page(request,eid=0):
         results['Parameter']=Parameter
         results['ParameterRaw']=ParameterRaw
         results['Response']=Response
+        print(results)
         return render(request,'add_testcase.html',{'results':results})
     else:
         return render(request,'add_testcase.html')

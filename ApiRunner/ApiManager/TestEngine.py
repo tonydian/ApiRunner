@@ -12,14 +12,18 @@ class getDb():
         self.api_id=api_id
         
     def getApiInfo(self):
-        results=ApiInfo.objects.filter(id=self.api_id)
+        results=ApiInfo.objects.filter(id=self.api_id).select_related('belong_project','belong_module')
         info={}
         if results:
             for item in results:
+                info['id']=item.id
+                info['name']=item.name
                 info['httpType']=item.httpType
                 info['requestType']=item.requestType
                 info['apiAddress']=item.apiAddress
                 info['requestParameterType']=item.requestParameterType
+                info['belong_project']=item.belong_project.project_name
+                info['belong_module']=item.belong_module.module_name
             return info
         else:
             return {}
