@@ -149,23 +149,30 @@ def testcase_list(request):
 
 
 def add_testcase_page(request,eid=0):
+    results={}
     if eid!=0:
         CaseMessage=getDb(eid)
         info=CaseMessage.getApiInfo()
         headers=CaseMessage.getApiHeader()
-        Parameter=CaseMessage.getApiParameter()
+        Parameter=CaseMessage.getApiParemeter_all()
         ParameterRaw=CaseMessage.getApiParameterRaw()
         Response=CaseMessage.getApiResponse()
-        results={}
         results['info']=info
         results['headers']=headers
         results['Parameter']=Parameter
         results['ParameterRaw']=ParameterRaw
         results['Response']=Response
+        results['context']='Empty'
         print(results)
         return render(request,'add_testcase.html',{'results':results})
     else:
-        return render(request,'add_testcase.html')
+        results['info']={}
+        results['headers']={}
+        results['Parameter']={}
+        results['ParameterRaw']={}
+        results['Response']={}
+        results['context']='NoEmpty'
+        return render(request,'add_testcase.html',{'results':results})
 
 def del_testcase(request):
     ret={'status':True}

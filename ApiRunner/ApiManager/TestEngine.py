@@ -49,6 +49,28 @@ class getDb():
         else:
             return {}
         
+    def getApiParemeter_all(self):
+        results=ApiParameter.objects.filter(belong_Api_id=self.api_id)
+        Parameter_all=[]
+        Parameter={}
+        if results:
+            for item in results:
+                Parameter['name']=item.name
+                Parameter['value']=item.value
+                Parameter['type']=item.type
+                if(item.required==False):
+                    Parameter['required']='false'
+                else:
+                    Parameter['required']='true'
+                Parameter['description']=item.description
+                Parameter_all.append(Parameter)
+                Parameter={}
+            return Parameter_all
+        else:
+            return []
+                
+                
+        
     def getApiParameterRaw(self):
         results=ApiParameterRaw.objects.filter(belong_Api_id=self.api_id)
         ParameterRaw={}

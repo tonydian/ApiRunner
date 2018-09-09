@@ -12,6 +12,9 @@ Index
         //为每一个确定按钮设置点击事件
         confirm()
         //全选/反选
+
+
+
         $('#select_header').click(function () {
             //判断checkbox是否选中
             var flag = this.checked;
@@ -202,9 +205,53 @@ Index
        })
 
         if($('input#testcase_id').val()!=""){
-            $('h1').text("修改用例")
+            $('h1').text("修改用例");
+            {% autoescape off %}
+            var info={{ results.info }};
+            var headers={{ results.headers }};
+			var Parameter={{ results.Parameter }};
+            var Response={{ results.Response }};
+            var ParameterRaw={{ results.ParameterRaw }};
+            {% endautoescape %}
+            if(!$.isEmptyObject(Parameter)){
+            	 var tables = $('#ApiParameter')
+                 tables.find('td').remove()
+                 for(var i=0;i<Parameter.length;i++){
+            	     if(Parameter[i].required=='true'){
+            	         var checktd="<td><input type=\"checkbox\" checked='checked'></td>\n"
+                     }
+                     else{
+                         var checktd="<td><input type=\"checkbox\"></td>\n"
+                     }
+                     if(Parameter[i].type=='string'){
+            	         var typetd="<option value=\"string\" selected=\"selected\">string</option>\n" +
+                             "<option value=\"int\">int</option>\n"
+                     }
+                     else{
+                         var typetd="<option value=\"string\">string</option>\n" +
+                             "<option value=\"int\" selected=\"selected\">int</option>\n"
+                     }
+                     var addtr=$("<tr>\n" +
+                         "<td><input type=\"checkbox\"></td>\n" +
+                         "<td>"+Parameter[i].name+"</td>\n" +
+                         "<td>"+Parameter[i].value+"</td>\n" +
+                         "<td><select class=\"form-control\">\n" + typetd +
+                         "</select></td>\n" + checktd+
+                         "<td>"+Parameter[i].description+"</td>\n" +
+                         "<td>\n" +
+                         "<input type=\"button\" value=\"编辑\" class=\"btn btn-default\">\n" +
+                         "<input type=\"button\" value=\"确定\" class=\"btn btn-default\">\n" +
+                         "</td>\n" +
+                         "</tr>");
+                     addtr.appendTo(tables);
+                     $('input[value="编辑"]').on("click", edit());
+                     $('input[value="确定"]').on("click", confirm());
 
-        }
+
+                };
+            };
+           
+        };
 
 
     });
@@ -370,7 +417,7 @@ Index
                                 <label class="col-sm-3 control-label" for="belong_project">所属项目</label>
                                 <div class="col-sm-9">
                                     <select id="belong_project" name="belong_project" class="form-control">
-                                    	{% if results != Empty %}
+                                    	{% if results.context != 'NoEmpty' %}
                                     	<option value={{ results.info.belong_project }} selected="selected " disabled="disabled"  style='display: none'>{{ results.info.belong_project }}</option>
                                     	{% else %}
                                         <option value="请选择" disabled="disabled"  style='display: none' selected="selected">请选择</option>

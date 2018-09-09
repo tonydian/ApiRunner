@@ -141,7 +141,6 @@ def Save_ApiResponse(request):
             value=form.cleaned_data['value']
             type=form.cleaned_data['type']
             description=form.cleaned_data['description']
-            
             ApiResponse.objects.create(belong_Api_id=api_id,name=name,type=type,value=value,required=required,description=description)
             
         else:
