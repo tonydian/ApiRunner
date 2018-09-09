@@ -77,7 +77,7 @@ class getDb():
         if results:
             for item in results:
                 ParameterRaw['data']=item.data
-            return Parameter
+            return ParameterRaw
         else:
             return {}
         
