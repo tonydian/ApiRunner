@@ -156,13 +156,13 @@ def add_testcase_page(request,eid=0):
         headers=CaseMessage.getApiHeader()
         Parameter=CaseMessage.getApiParemeter_all()
         ParameterRaw=CaseMessage.getApiParameterRaw()
-        Response=CaseMessage.getApiResponse()
+        Response=CaseMessage.getApiResponse_all()
         results['info']=info
         results['headers']=headers
         results['Parameter']=Parameter
         results['ParameterRaw']=ParameterRaw
         results['Response']=Response
-        results['context']='Empty'
+        results['context']='NoEmpty'
         print(results)
         return render(request,'add_testcase.html',{'results':results})
     else:
@@ -171,7 +171,7 @@ def add_testcase_page(request,eid=0):
         results['Parameter']={}
         results['ParameterRaw']={}
         results['Response']={}
-        results['context']='NoEmpty'
+        results['context']='Empty'
         return render(request,'add_testcase.html',{'results':results})
 
 def del_testcase(request):

@@ -55,6 +55,7 @@ class getDb():
         Parameter={}
         if results:
             for item in results:
+                Parameter['id']=item.id
                 Parameter['name']=item.name
                 Parameter['value']=item.value
                 Parameter['type']=item.type
@@ -90,6 +91,27 @@ class getDb():
             return Response
         else:
             return {}
+        
+    def getApiResponse_all(self):
+        results=ApiResponse.objects.filter(belong_Api_id=self.api_id)
+        Response_all=[]
+        Response={}
+        if results:
+            for item in results:
+                Response['id']=item.id
+                Response['name']=item.name
+                Response['value']=item.value
+                Response['type']=item.type
+                if(item.required==False):
+                    Response['required']='false'
+                else:
+                    Response['required']='true'
+                Response['description']=item.description
+                Response_all.append(Response)
+                Response={}
+            return Response_all
+        else:
+            return []
 
 
 def RunTestCase(api_id):
