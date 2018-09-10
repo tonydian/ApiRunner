@@ -82,6 +82,9 @@ def Save_ApiInfo(request):
         form=AddApiInfoForm()
     return HttpResponse(json.dumps({'status':200,'message':'success','id':Api_id,'requestParameterTypeName':requestParameterTypeName}))
 
+def Edit_ApiInfo(request):
+    pass
+
 def Save_ApiHeader(request):
     if request.method =='POST':
         form=AddApiHead(request.POST)
