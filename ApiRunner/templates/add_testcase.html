@@ -319,6 +319,7 @@ Index
     		if(name!=''&& value!=''&&name!="标签"){
     			$.ajax({
     				url:url,
+    				async : false,
                     type:'POST',
                     data:{'api_id':id,'name':name,'value':value},
                     dataType:"json",
@@ -342,6 +343,7 @@ Index
         		if(name!=''&& value!=''&&name!="请求参数"){
         			$.ajax({
         				url:url,
+        				async : false,
                         type:'POST',
                         data:{'belong_Api':id,'name':name,'value':value,'type':type,'required':required,'description':description,'requestParameterTypeName':requestParameterTypeName},
                         dataType:"json",
@@ -355,6 +357,7 @@ Index
     		var data=$('#textforraw .form-control').val()
     		$.ajax({
     			url:url,
+    			async : false,
     			type:'POST',
     			data:{'belong_Api':id,'data':data},
     			dataType:"json",
@@ -378,6 +381,7 @@ Index
     			$.ajax({
     				url:url,
                     type:'POST',
+                    async : false,
                     data:{'belong_Api':id,'name':name,'value':value,'type':type,'required':required,'description':description},
                     dataType:"json",
                     success:function () {
