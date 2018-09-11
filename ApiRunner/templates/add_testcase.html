@@ -177,6 +177,7 @@ Index
            $.ajax({
                url:'/api/Save_ApiInfo/',
                type:'POST',
+               async : false,
                data:$("#testcase-form").serialize(),
                dataType:"json",
                success:function (data) {
