@@ -82,8 +82,31 @@ def Save_ApiInfo(request):
         form=AddApiInfoForm()
     return HttpResponse(json.dumps({'status':200,'message':'success','id':Api_id,'requestParameterTypeName':requestParameterTypeName}))
 
-def Edit_ApiInfo(request):
-    pass
+def Edit_ApiInfo(request,eid):
+    print(eid)
+    if request.method =='POST':
+        form=AddApiInfoForm(request.POST)
+        print(form)
+        if form.is_valid():
+            belong_project = form.cleaned_data['belong_project']
+            belong_module = form.cleaned_data['belong_module']
+            apiname = form.cleaned_data['apiname']
+            httpType = form.cleaned_data['httpType']
+            requestType = form.cleaned_data['requestType']
+            apiAddress = form.cleaned_data['apiAddress']
+            requestParameterType = form.cleaned_data['requestParameterType']
+            project_id=ProjectInfo.objects.filter(project_name=belong_project).values('id')[0]['id']
+            module_id=ModuleInfo.objects.filter(module_name=belong_module).values('id')[0]['id']
+            if requestParameterType=="option1":
+                requestParameterTypeName="form-data"
+            else:
+                requestParameterTypeName="raw"
+#             ApiInfo.objects.create(name=apiname,httpType=httpType,requestType=requestType,apiAddress=apiAddress,requestParameterType=requestParameterTypeName,belong_project_id=project_id,belong_module_id=module_id)
+            Api_id=ApiInfo.objects.filter(name=apiname).values('id')[0]['id']
+    else:
+        form=AddApiInfoForm()
+    return HttpResponse(json.dumps({'status':200,'message':'success','id':Api_id,'requestParameterTypeName':requestParameterTypeName}))
+
 
 def Save_ApiHeader(request):
     if request.method =='POST':

@@ -172,23 +172,37 @@ Index
                 }
             });
         }
-        
-       $('#save').click(function () {
-           $.ajax({
-               url:'/api/Save_ApiInfo/',
-               type:'POST',
-               async : false,
-               data:$("#testcase-form").serialize(),
-               dataType:"json",
-               success:function (data) {
-            	   SaveApiHeaderData('ApiHeader',data.id,'/api/Save_ApiHeader/')
-            	   SaveApiParameter('ApiParameter',data.id,data.requestParameterTypeName,'/api/Save_ApiParameter/')
-            	   SaveApiResponse('ApiResponse',data.id,'/api/Save_ApiResponse/')
-            	   
-               }
-
+       
+    	   $('#save').click(function () {
+    		   if($('input#testcase_id').val()==""){
+               $.ajax({
+                   url:'/api/Save_ApiInfo/',
+                   type:'POST',
+                   async : false,
+                   data:$("#testcase-form").serialize(),
+                   dataType:"json",
+                   success:function (data) {
+                	   SaveApiHeaderData('ApiHeader',data.id,'/api/Save_ApiHeader/')
+                	   SaveApiParameter('ApiParameter',data.id,data.requestParameterTypeName,'/api/Save_ApiParameter/')
+                	   SaveApiResponse('ApiResponse',data.id,'/api/Save_ApiResponse/')
+                   }
+               })
+    		 }else{
+    			 eid=$('input#testcase_id').val()
+    			 $.ajax({
+                     url:'/api/Edit_ApiInfo/'+eid+'/',
+                     type:'POST',
+                     async : false,
+                     data:$("#testcase-form").serialize(),
+                     dataType:"json",
+                     success:function (data) {
+//                  	   SaveApiHeaderData('ApiHeader',data.id,'/api/Save_ApiHeader/')
+//                  	   SaveApiParameter('ApiParameter',data.id,data.requestParameterTypeName,'/api/Save_ApiParameter/')
+//                  	   SaveApiResponse('ApiResponse',data.id,'/api/Save_ApiResponse/')
+                     }
+                 })
+    		 }
            })
-       })
        
        $('#apiname').blur(function(){
     	   var value=$(this).val();
@@ -382,7 +396,7 @@ Index
     			$.ajax({
     				url:url,
                     type:'POST',
-                    async : false,
+                    async : false, 
                     data:{'belong_Api':id,'name':name,'value':value,'type':type,'required':required,'description':description},
                     dataType:"json",
                     success:function () {
