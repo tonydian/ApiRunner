@@ -17,7 +17,7 @@ def get_project(request):
     else:
         if results:
             for result in results:
-                project={}
+                project={}           
                 project['project_name']=result.project_name
                 project['responsible_name']=result.responsible_name
                 project['test_user']=result.test_user
@@ -86,7 +86,6 @@ def Edit_ApiInfo(request,eid):
     print(eid)
     if request.method =='POST':
         form=AddApiInfoForm(request.POST)
-        print(form)
         if form.is_valid():
             belong_project = form.cleaned_data['belong_project']
             belong_module = form.cleaned_data['belong_module']
