@@ -157,7 +157,6 @@ Index
             });
         })
         if($("#belong_project").find("option:selected").text()!='请选择'){
-            $('#belong_module').empty()
             var checkText = $("#belong_project").find("option:selected").text();
             $.ajax({
                 url: '/api/get_module/',
@@ -173,7 +172,7 @@ Index
             });
         }
        
-    	   $('#save').click(function () {
+    	   $('#save,#application').click(function () {
     		   if($('input#testcase_id').val()==""){
                $.ajax({
                    url:'/api/Save_ApiInfo/',
@@ -196,9 +195,9 @@ Index
                      data:$("#testcase-form").serialize(),
                      dataType:"json",
                      success:function (data) {
-//                  	   SaveApiHeaderData('ApiHeader',data.id,'/api/Save_ApiHeader/')
-//                  	   SaveApiParameter('ApiParameter',data.id,data.requestParameterTypeName,'/api/Save_ApiParameter/')
-//                  	   SaveApiResponse('ApiResponse',data.id,'/api/Save_ApiResponse/')
+                  	    SaveApiHeaderData('ApiHeader',data.id,'/api/Save_ApiHeader/')
+                  	    SaveApiParameter('ApiParameter',data.id,data.requestParameterTypeName,'/api/Save_ApiParameter/')
+                  	    SaveApiResponse('ApiResponse',data.id,'/api/Save_ApiResponse/')
                      }
                  })
     		 }
@@ -231,6 +230,7 @@ Index
             if(!$.isEmptyObject(headers)){
                 var tables=$('#ApiHeader')
                 tables.find('td').remove()
+                tables.find('tr').eq(1).remove()
                 $.each(headers,function(name,value){
                     var addtr = $("<tr>" +
                         "<td><input type=\"checkbox\"></td>" +
@@ -251,6 +251,7 @@ Index
             if(!$.isEmptyObject(Parameter)){
             	 var tables = $('#ApiParameter')
                  tables.find('td').remove()
+                 tables.find('tr').eq(1).remove()
                  for(var i=0;i<Parameter.length;i++){
             	     if(Parameter[i].required=='true'){
             	         var checktd="<td><input type=\"checkbox\" checked='checked'></td>\n"
@@ -288,6 +289,7 @@ Index
             if(!$.isEmptyObject(Response)){
            	 var tables = $('#ApiResponse')
                 tables.find('td').remove()
+                tables.find('tr').eq(1).remove()
                 for(var i=0;i<Response.length;i++){
            	     if(Response[i].required=='true'){
            	         var checktd="<td><input type=\"checkbox\" checked='checked'></td>\n"
@@ -507,7 +509,7 @@ Index
                                 <div class="col-sm-9">
                                     <select id="belong_module" name="belong_module" class="form-control">
                                         {% if results.context == 'NoEmpty' %}
-                                        <option value={{ results.info.belong_module }} selected="selected " disabled="disabled"  style='display: none'>{{ results.info.belong_module }}</option>
+                                        <option value={{ results.info.belong_module }} selected="selected" style='display: none'>{{ results.info.belong_module }}</option>
                                         {% else %}
                                         <option value="请选择" disabled="disabled"  style='display: none' selected="selected">请选择</option>
                                         {% endif %}
@@ -530,7 +532,7 @@ Index
                         <div class="col-lg-1">
                             <select id="requestType" name="requestType" class="form-control">
                                 {% if results != Empty %}
-                                <option value={{ results.info.requestType }} selected="selected " disabled="disabled"  style='display: none'>{{ results.info.requestType }}</option>
+                                <option value={{ results.info.requestType }} selected="selected" style='display: none'>{{ results.info.requestType }}</option>
                                 <option value="get">get</option>
                                 <option value="post">post</option>
                                 <option value="put">put</option>
@@ -546,7 +548,7 @@ Index
                         <div class="col-lg-1">
                             <select id="httpType" name="httpType" class="form-control">
                                 {% if results != Empty %}
-                                <option value={{ results.info.httpType }} selected="selected " disabled="disabled"  style='display: none'>{{ results.info.httpType }}</option>
+                                <option value={{ results.info.httpType }} selected="selected"  style='display: none'>{{ results.info.httpType }}</option>
                                 <option value="http">http</option>
                                 <option value="https">https</option>
                                 {% else %}
@@ -708,8 +710,8 @@ Index
                         <div class="row">
                         	<a type="submit" class="btn btn-primary btn-lg" name="application" href='#'>快速测试</a>
                             <a type="submit" class="btn btn-primary btn-lg" name="application" href='/testcase_list/' id="save">保存</a>
-                            <a type="submit" class="btn btn-primary btn-lg" name="application" href='#'>应用</a>
-                            <a type="submit" class="btn btn-primary btn-lg" name="cancel" href='#'>取消</a>
+                            <a type="submit" class="btn btn-primary btn-lg" name="application" href='#' id="application">应用</a>
+                            <a type="submit" class="btn btn-primary btn-lg" name="cancel" href='/testcase_list/'>取消</a>
                         </div>
                     </div>
                 </div>

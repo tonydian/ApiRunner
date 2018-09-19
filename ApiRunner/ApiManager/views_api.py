@@ -83,7 +83,6 @@ def Save_ApiInfo(request):
     return HttpResponse(json.dumps({'status':200,'message':'success','id':Api_id,'requestParameterTypeName':requestParameterTypeName}))
 
 def Edit_ApiInfo(request,eid):
-    print(eid)
     if request.method =='POST':
         form=AddApiInfoForm(request.POST)
         if form.is_valid():
@@ -100,17 +99,18 @@ def Edit_ApiInfo(request,eid):
                 requestParameterTypeName="form-data"
             else:
                 requestParameterTypeName="raw"
-#             ApiInfo.objects.create(name=apiname,httpType=httpType,requestType=requestType,apiAddress=apiAddress,requestParameterType=requestParameterTypeName,belong_project_id=project_id,belong_module_id=module_id)
-            Api_id=ApiInfo.objects.filter(name=apiname).values('id')[0]['id']
+        ApiInfo.objects.filter(id=eid).update(name=apiname,httpType=httpType,requestType=requestType,apiAddress=apiAddress,requestParameterType=requestParameterTypeName,belong_project_id=project_id,belong_module_id=module_id)
+        ApiHead.objects.filter(belong_Api_id=eid).delete()
+        ApiParameter.objects.filter(belong_Api_id=eid).delete()
+        ApiResponse.objects.filter(belong_Api_id=eid).delete()
+        ApiParameterRaw.objects.filter(belong_Api_id=eid).delete()
     else:
         form=AddApiInfoForm()
-    return HttpResponse(json.dumps({'status':200,'message':'success','id':Api_id,'requestParameterTypeName':requestParameterTypeName}))
-
+    return HttpResponse(json.dumps({'status':200,'message':'success','id':eid,'requestParameterTypeName':requestParameterTypeName}))
 
 def Save_ApiHeader(request):
     if request.method =='POST':
         form=AddApiHead(request.POST)
-        
         if form.is_valid():
             api_id=form.cleaned_data['api_id']
             name=form.cleaned_data['name']
@@ -171,7 +171,8 @@ def Save_ApiResponse(request):
         else:
             form=AddApiResponse()
         return HttpResponse(json.dumps({'status':200}))
-    
+        
+        
 def run_testcase(request):
     if request.method=='GET':
         eid=request.GET.get('CaseId')
