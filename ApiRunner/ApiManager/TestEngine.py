@@ -131,7 +131,17 @@ def run(httpType,requestType,apiAddress,requestParameterType,headers,Parameter,R
         for item,key in Response.items():
             if str(r.json()[item])!=key:
                 status['result']='false'
-                print(r.json()[item])
+                break
+        response=r.json()
+        response['result']=status['result']
+        return json.dumps(response)
+    if requestType=='post':
+        r=requests.post(url,data=Parameter,headers=headers)
+        print(r.text)
+        status={'result':'success'}
+        for item,key in Response.items():
+            if str(r.json()[item])!=key:
+                status['result']='false'
                 break
         response=r.json()
         response['result']=status['result']
