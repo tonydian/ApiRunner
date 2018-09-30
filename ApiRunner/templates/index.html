@@ -2,6 +2,20 @@
 {% block page-title %}
 Index
 {% endblock %}
+{% block script %}
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            url:'/api/get_quantity/',
+            type:'GET',
+            dataType:"json",
+            success:function (num) {
+                alert(num.ProjectNum)
+            }
+        })
+    })
+</script>
+{% endblock %}
 {% block page-content %}
  <div class="row">
                     <div class="col-md-12">
@@ -28,7 +42,7 @@ Index
                                 
                             </div>
                             <div class="panel-right">
-								<h3>8,457</h3>
+								<h3 id="projectnum">{{ num.ProjectNum }}</h3>
                                <strong> 项目</strong>
                             </div>
                         </div>

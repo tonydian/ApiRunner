@@ -177,6 +177,18 @@ def run_testcase(request):
     if request.method=='GET':
         eid=request.GET.get('CaseId')
     return HttpResponse(RunTestCase(eid))
+
+def get_quantity(request):
+    if request.method=='GET':
+        ProjectNum=ProjectInfo.objects.count()
+        ModuleNum=ModuleInfo.objects.count()
+        ApiNum=ApiInfo.objects.count()
+    results={}
+    results['ProjectNum']=ProjectNum
+    results['ModuleNum']=ModuleNum
+    results['ApiNum']=ApiNum
+    print(results)
+    return HttpResponse(json.dumps(results))
     
     
 
