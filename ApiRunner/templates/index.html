@@ -10,7 +10,9 @@ Index
             type:'GET',
             dataType:"json",
             success:function (num) {
-                alert(num.ProjectNum)
+                $('#projectnum').text(num.ProjectNum)
+                $('#modelnum').text(num.ModuleNum)
+                $('#testcasenum').text(num.ApiNum)
             }
         })
     })
@@ -42,7 +44,7 @@ Index
                                 
                             </div>
                             <div class="panel-right">
-								<h3 id="projectnum">{{ num.ProjectNum }}</h3>
+								<h3 id="projectnum"></h3>
                                <strong> 项目</strong>
                             </div>
                         </div>
@@ -54,7 +56,7 @@ Index
 								</div>
                                 
                             <div class="panel-right">
-							<h3>52,160 </h3>
+							<h3 id="modelnum"></h3>
                                <strong> 模块</strong>
 
                             </div>
@@ -67,7 +69,7 @@ Index
                                
                             </div>
                             <div class="panel-right">
-							 <h3>15,823 </h3>
+							 <h3 id="testcasenum"></h3>
                                <strong> 用例 </strong>
 
                             </div>
@@ -77,10 +79,10 @@ Index
                         <div class="panel panel-primary text-center no-boder bg-color-brown">
                             <div class="panel-left pull-left brown">
                                 <i class="fa fa-fire fa-5x"></i>
-                                
+
                             </div>
                             <div class="panel-right">
-							<h3>36,752 </h3>
+							<h3 id="tasknum"></h3>
                              <strong>任务</strong>
 
                             </div>
@@ -155,29 +157,29 @@ Index
 		<!--</div>-->
 			
 				
-                <div class="row">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                Bar Chart Example
-                            </div>
-                            <div class="panel-body">
-                                <div id="morris-bar-chart"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--<div class="col-md-3 col-sm-12 col-xs-12">-->
+                <!--<div class="row">-->
+                    <!--<div class="col-md-12 col-sm-12 col-xs-12">-->
                         <!--<div class="panel panel-default">-->
                             <!--<div class="panel-heading">-->
-                                <!--Donut Chart Example-->
+                                <!--Bar Chart Example-->
                             <!--</div>-->
                             <!--<div class="panel-body">-->
-                                <!--<div id="morris-donut-chart"></div>-->
+                                <!--<div id="morris-bar-chart"></div>-->
                             <!--</div>-->
                         <!--</div>-->
                     <!--</div>-->
+                    <!--&lt;!&ndash;<div class="col-md-3 col-sm-12 col-xs-12">&ndash;&gt;-->
+                        <!--&lt;!&ndash;<div class="panel panel-default">&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="panel-heading">&ndash;&gt;-->
+                                <!--&lt;!&ndash;Donut Chart Example&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<div class="panel-body">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<div id="morris-donut-chart"></div>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
 
-                </div>
+                <!--</div>-->
 				<div class="row">
 				<div class="col-md-12">
 				
