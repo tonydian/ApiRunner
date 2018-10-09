@@ -4,9 +4,11 @@ Created on 2018年7月16日
 @author: Administrator
 '''
 import requests
+import ddt
 import unittest
 import json
 from ApiManager.models import ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
+from openpyxl.worksheet import datavalidation
 class getDb():
     def __init__(self,api_id):
         self.api_id=api_id
@@ -114,6 +116,8 @@ class getDb():
             return []
 
 
+
+
 def RunTestCase(api_id):
     DbData=getDb(api_id)
     info=DbData.getApiInfo()
@@ -146,5 +150,44 @@ def run(httpType,requestType,apiAddress,requestParameterType,headers,Parameter,R
         response=r.json()
         response['result']=status['result']
         return json.dumps(response)
+    
+def getData(api_id):
+    DbData=getDb(api_id)
+    info=DbData.getApiInfo()
+    headers=DbData.getApiHeader()
+    Parameter=DbData.getApiParameter()
+    Response=DbData.getApiResponse()
+    data={}
+    data['httpType']=info['httpType']
+    data['requestType']=info['requestType']
+    data['apiAddress']=info['apiAddress']
+    data['requestParameterType']=info['requestParameterType']
+    data['headers']=headers
+    data['Parameter']=Parameter
+    data['Response']=Response
+    return data
+
+testdata=getData(6)
+print(testdata) 
+
+
+def Send_Request(httpType,requestType,apiAddress,requestParameterType,headers,Parameter):
+    url=httpType+'://'+apiAddress
+    if requestType=='get':
+        r=requests.get(url,params=Parameter,headers=headers)
+    if requestType=='post':
+        r=requests.post(url,data=Parameter,headers=headers)
+    return r
+ 
+@ddt.ddt
+class Test_api(unittest.TestCase):
+    @ddt.data(*testdata)
+    def test_api(self,data):
+        r=Send_Request(data['httpType'], data['requestType'], data['apiAddress'], data['requestParameterType'], data['headers'], data['Parameter'])
+        check=data['Response']
+        for item,key in check.items():
+            self.assertEquals(r.json()[item],key)
+
+    
         
     
