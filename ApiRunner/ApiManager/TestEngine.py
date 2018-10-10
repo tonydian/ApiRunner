@@ -4,8 +4,6 @@ Created on 2018年7月16日
 @author: Administrator
 '''
 import requests
-import ddt
-import unittest
 import json
 from ApiManager.models import ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
 from openpyxl.worksheet import datavalidation
@@ -167,10 +165,6 @@ def getData(api_id):
     data['Response']=Response
     return data
 
-testdata=getData(6)
-print(testdata) 
-
-
 def Send_Request(httpType,requestType,apiAddress,requestParameterType,headers,Parameter):
     url=httpType+'://'+apiAddress
     if requestType=='get':
@@ -179,15 +173,8 @@ def Send_Request(httpType,requestType,apiAddress,requestParameterType,headers,Pa
         r=requests.post(url,data=Parameter,headers=headers)
     return r
  
-@ddt.ddt
-class Test_api(unittest.TestCase):
-    @ddt.data(*testdata)
-    def test_api(self,data):
-        r=Send_Request(data['httpType'], data['requestType'], data['apiAddress'], data['requestParameterType'], data['headers'], data['Parameter'])
-        check=data['Response']
-        for item,key in check.items():
-            self.assertEquals(r.json()[item],key)
 
-    
+
+
         
     
