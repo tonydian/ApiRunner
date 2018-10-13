@@ -5,6 +5,8 @@ Created on 2018年7月16日
 '''
 import requests
 import json
+import unittest
+import HTMLTestReportCN
 from ApiManager.models import ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
 from openpyxl.worksheet import datavalidation
 class getDb():
@@ -69,9 +71,27 @@ class getDb():
             return Parameter_all
         else:
             return []
-                
-                
         
+class ParametrizedTestCase(unittest.TestCase):
+    """ TestCase classes that want to be parametrized should
+        inherit from this class.
+    """
+    def __init__(self, methodName='runTest', param=None):
+        super(ParametrizedTestCase, self).__init__(methodName)
+        self.param = param
+ 
+    @staticmethod
+    def parametrize(testcase_klass, param=None):
+        """ Create a suite containing all tests taken from the given
+            subclass, passing them the parameter 'param'.
+        """
+        testloader = unittest.TestLoader()
+        testnames = testloader.getTestCaseNames(testcase_klass)
+        suite = unittest.TestSuite()
+        for name in testnames:
+            suite.addTest(testcase_klass(name, param=param))
+        return suite       
+   
     def getApiParameterRaw(self):
         results=ApiParameterRaw.objects.filter(belong_Api_id=self.api_id)
         ParameterRaw={}
@@ -112,8 +132,6 @@ class getDb():
             return Response_all
         else:
             return []
-
-
 
 
 def RunTestCase(api_id):
@@ -165,14 +183,18 @@ def getData(api_id):
     data['Response']=Response
     return data
 
-def Send_Request(httpType,requestType,apiAddress,requestParameterType,headers,Parameter):
-    url=httpType+'://'+apiAddress
-    if requestType=='get':
-        r=requests.get(url,params=Parameter,headers=headers)
-    if requestType=='post':
-        r=requests.post(url,data=Parameter,headers=headers)
-    return r
- 
+def Test_api(ParametrizedTestCase):
+    def test_run(self):
+        url=self.param['httpType']+'://'+self.param['apiAddress']
+        if self.param['requestType']=='get':
+            r=requests.get(url,params=self.param['Parameter'],headers=self.param['headers'])
+        if self.param['requestType']=='get':
+            r=requests.post(url,data=self.param['Parameter'],headers=self.param['headers'])
+        status={'result':'success'}
+        for item,key in self.param['Response'].items():
+            self.assertEqual(r.json()[item],key)
+            
+
 
 
 
