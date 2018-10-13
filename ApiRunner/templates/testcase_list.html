@@ -49,6 +49,23 @@ Index
             		})
             	}    
             })
+            $('#runtestcasebyunit').click(function(){
+                if($("td input[type='checkbox']:checked").length !=1){
+                    alert('暂时只支持一个用例执行')
+                }else{
+                    eid=$("td input[type='checkbox']:checked").val()
+                    $.ajax({
+                        url:'/api/run_testcase_unittest/',
+                        type: 'GET',
+                        data:{'CaseId':eid},
+                        success:function(arg){
+                            var dict = JSON.parse(arg);
+                            alert(dict.result)
+
+                        }
+                    })
+                }
+            })
             $('#edittestcase').click(function () {
                 if($("td input[type='checkbox']:checked").length !=1){
                     alert('请选择一个用例进行编辑')
@@ -73,6 +90,7 @@ Index
        			<a href="#" class="btn btn-primary" id='deltestcase'><i class="fa fa-pencil"></i>删除用例</a>
        			<a href="#" class="btn btn-primary" id='edittestcase'><i class=" fa fa-refresh "></i>修改用例</a>
        			<a href="#" class="btn btn-primary" id='runtestcase'><i class=" fa fa-glass"></i>执行用例</a>
+                <a href="#" class="btn btn-primary" id='runtestcasebyunit'><i class=" fa fa-plane"></i>生成测试报告</a>
        			</div>
        			</div>
         	</div>

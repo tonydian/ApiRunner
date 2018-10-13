@@ -178,6 +178,9 @@ def run_testcase(request):
         eid=request.GET.get('CaseId')
     return HttpResponse(RunTestCase(eid))
 
+def run_testcase_unittest(request):
+    pass
+
 def get_quantity(request):
     if request.method=='GET':
         ProjectNum=ProjectInfo.objects.count()
