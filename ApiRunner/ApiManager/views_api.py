@@ -7,7 +7,9 @@ import json
 from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
 from ApiManager.forms import AddApiInfoForm,AddApiHead,AddApiParameter,AddApiResponse,AddApiParameter_raw
 from django.http import HttpResponse
-from ApiManager.TestEngine import RunTestCase
+from ApiManager.TestEngine import RunTestCase,Testapi,ParametrizedTestCase,getData,TestOne
+from ApiManager.HTMLTestReportCN import HTMLTestRunner
+import unittest
 def get_project(request):
     project_list=[]
     try:
@@ -179,7 +181,17 @@ def run_testcase(request):
     return HttpResponse(RunTestCase(eid))
 
 def run_testcase_unittest(request):
-    pass
+    if request.method=='GET':
+        eid=request.GET.get('CaseId')
+        data=getData(eid)
+        suite=unittest.TestSuite()
+        suite.addTest(ParametrizedTestCase.parametrize(Testapi,param=data))
+#         unittest.TextTestRunner(verbosity=2).run(suite)
+        filePath ='../result.html'
+        fp = open(filePath,'wb+')
+        runner =HTMLTestRunner(stream=fp,title='Test Report')
+        runner.run(suite)
+    return HttpResponse(json.dumps({'status':200}))
 
 def get_quantity(request):
     if request.method=='GET':
@@ -190,10 +202,9 @@ def get_quantity(request):
     results['ProjectNum']=ProjectNum
     results['ModuleNum']=ModuleNum
     results['ApiNum']=ApiNum
-    print(results)
     return HttpResponse(json.dumps(results))
     
-    
+
 
         
 

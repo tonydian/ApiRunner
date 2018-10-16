@@ -8,7 +8,6 @@ import json
 import unittest
 import HTMLTestReportCN
 from ApiManager.models import ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
-from openpyxl.worksheet import datavalidation
 class getDb():
     def __init__(self,api_id):
         self.api_id=api_id
@@ -70,27 +69,7 @@ class getDb():
                 Parameter={}
             return Parameter_all
         else:
-            return []
-        
-class ParametrizedTestCase(unittest.TestCase):
-    """ TestCase classes that want to be parametrized should
-        inherit from this class.
-    """
-    def __init__(self, methodName='runTest', param=None):
-        super(ParametrizedTestCase, self).__init__(methodName)
-        self.param = param
- 
-    @staticmethod
-    def parametrize(testcase_klass, param=None):
-        """ Create a suite containing all tests taken from the given
-            subclass, passing them the parameter 'param'.
-        """
-        testloader = unittest.TestLoader()
-        testnames = testloader.getTestCaseNames(testcase_klass)
-        suite = unittest.TestSuite()
-        for name in testnames:
-            suite.addTest(testcase_klass(name, param=param))
-        return suite       
+            return []     
    
     def getApiParameterRaw(self):
         results=ApiParameterRaw.objects.filter(belong_Api_id=self.api_id)
@@ -132,6 +111,26 @@ class ParametrizedTestCase(unittest.TestCase):
             return Response_all
         else:
             return []
+        
+class ParametrizedTestCase(unittest.TestCase):
+    """ TestCase classes that want to be parametrized should
+        inherit from this class.
+    """
+    def __init__(self, methodName='runTest', param=None):
+        super(ParametrizedTestCase, self).__init__(methodName)
+        self.param = param
+ 
+    @staticmethod
+    def parametrize(testcase_klass, param=None):
+        """ Create a suite containing all tests taken from the given
+            subclass, passing them the parameter 'param'.
+        """
+        testloader = unittest.TestLoader()
+        testnames = testloader.getTestCaseNames(testcase_klass)
+        suite = unittest.TestSuite()
+        for name in testnames:
+            suite.addTest(testcase_klass(name, param=param))
+        return suite  
 
 
 def RunTestCase(api_id):
@@ -183,16 +182,26 @@ def getData(api_id):
     data['Response']=Response
     return data
 
-def Test_api(ParametrizedTestCase):
-    def test_run(self):
+class Testapi(ParametrizedTestCase):
+    def test_one(self):
         url=self.param['httpType']+'://'+self.param['apiAddress']
         if self.param['requestType']=='get':
             r=requests.get(url,params=self.param['Parameter'],headers=self.param['headers'])
-        if self.param['requestType']=='get':
+        if self.param['requestType']=='post':
             r=requests.post(url,data=self.param['Parameter'],headers=self.param['headers'])
-        status={'result':'success'}
+        result=r.json()
         for item,key in self.param['Response'].items():
-            self.assertEqual(r.json()[item],key)
+            self.assertEqual(result[item], key)
+            
+class TestOne(ParametrizedTestCase):
+    def setUp(self):
+        print("do something")
+        
+    def test_one(self):
+        print(self.param['requestType'])
+        
+    def tearDown(self):
+        print("test end")
             
 
 

@@ -17,5 +17,6 @@ urlpatterns = [
     path(r'run_testcase/',views_api.run_testcase,name='run_testcase'),
     path(r'Edit_ApiInfo/<int:eid>/',views_api.Edit_ApiInfo,name='Edit_ApiInfo'),
     path(r'get_quantity/',views_api.get_quantity,name='get_quantity'),
+    path(r'run_testcase_unittest/',views_api.run_testcase_unittest,name='run_testcase_unittest'),
     
 ]
