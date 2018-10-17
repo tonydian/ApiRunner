@@ -124,3 +124,7 @@ HERE = os.path.join(HERE, '../')
 STATICFILES_DIRS = [
     os.path.join(HERE, "static/"),
 ]
+REPORT_URL='/TestReport/'
+REPORT_DIRS=[
+    os.path.join(HERE,"TestReport/")
+]

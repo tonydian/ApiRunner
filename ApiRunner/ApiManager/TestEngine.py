@@ -193,15 +193,7 @@ class Testapi(ParametrizedTestCase):
         for item,key in self.param['Response'].items():
             self.assertEqual(result[item], key)
             
-class TestOne(ParametrizedTestCase):
-    def setUp(self):
-        print("do something")
-        
-    def test_one(self):
-        print(self.param['requestType'])
-        
-    def tearDown(self):
-        print("test end")
+
             
 
 

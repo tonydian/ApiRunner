@@ -7,9 +7,11 @@ import json
 from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
 from ApiManager.forms import AddApiInfoForm,AddApiHead,AddApiParameter,AddApiResponse,AddApiParameter_raw
 from django.http import HttpResponse
-from ApiManager.TestEngine import RunTestCase,Testapi,ParametrizedTestCase,getData,TestOne
+from ApiManager.TestEngine import RunTestCase,Testapi,ParametrizedTestCase,getData
 from ApiManager.HTMLTestReportCN import HTMLTestRunner
+from django.conf import settings
 import unittest
+import datetime
 def get_project(request):
     project_list=[]
     try:
@@ -187,8 +189,9 @@ def run_testcase_unittest(request):
         suite=unittest.TestSuite()
         suite.addTest(ParametrizedTestCase.parametrize(Testapi,param=data))
 #         unittest.TextTestRunner(verbosity=2).run(suite)
-        filePath ='../result.html'
-        fp = open(filePath,'wb+')
+        nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H-%M-%S')
+        filePath =settings.REPORT_DIRS+[nowTime]+['.html']
+        fp = open(''.join(filePath),'wb+')
         runner =HTMLTestRunner(stream=fp,title='Test Report')
         runner.run(suite)
     return HttpResponse(json.dumps({'status':200}))
