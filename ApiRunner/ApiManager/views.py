@@ -6,6 +6,9 @@ import json
 from .forms import AddProjectForm,AddModuleForm
 from django.http.response import HttpResponseRedirect
 from ApiManager.TestEngine import getDb
+from django.conf import settings
+import os
+
 
 # Create your views here.
 def index(request):
@@ -182,6 +185,20 @@ def del_testcase(request):
     except Exception as e:
         ret['status']=False
     return HttpResponse(json.dumps(ret))
+
+def report_list(request):
+    filePath =settings.REPORT_DIRS
+    fileList=[]
+    for root,dirs,files in os.walk(''.join(filePath)):
+        for file in files:
+            fileList.append(file)       
+    print(fileList)
+    return render(request,'report_list.html',{'fileList':fileList})
+            
+                
+            
+        
+    
             
         
     

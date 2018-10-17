@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block page-title %}
+Index
+{% endblock %}
+{% block script %}
+ <script type="text/javascript">
+        $(document).ready(function(){
+
+            $('#select_all').click(function () {
+                var flag=this.checked;
+                $("input[name^='report']").attr('checked',flag);
+            });
+//            $('a').click(function(){
+//                $.ajax({
+//                    url:'/api/show_report/',
+//                    type: 'GET',
+//                    data:{'report':$(this).parent().prev().text()},
+//                    success:function (arg) {
+//
+//                    }
+//
+//                })
+//            })
+        });
+
+     </script>
+       
+{% endblock %}
+{% block page-content %}
+
+       <div class="row">
+       		<div class="col-md-12">
+       		<div class="panel panel-default">
+       		<div class="panel-body"> 
+       			<a href="#" class="btn btn-primary" id='delproject'><i class="fa fa-pencil"></i>删除报告</a>
+       			</div>
+       			</div>
+        	</div>
+       </div>
+
+ 		<div class="row">
+                <div class="col-md-12">
+                      <!--    Striped Rows Table  -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            	报告列表
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped" width="100%">
+                                    <thead>
+                                        <tr>
+                                        	<th class="table-check"><input type="checkbox" id="select_all"/></th>
+                                            <th>报告名称</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for file in fileList %}
+								            <tr rowid="report_list">
+								            	<td><input type="checkbox" name="report_{{ file }}"/></td>
+								                <td>{{ file }}</td>
+								                <td><a href="/api/show_report/{{ file }}">进入</a></td>
+								            </tr>
+								    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+{% endblock %}

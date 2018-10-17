@@ -12,6 +12,8 @@ from ApiManager.HTMLTestReportCN import HTMLTestRunner
 from django.conf import settings
 import unittest
 import datetime
+from django.shortcuts import render
+from django.http import HttpResponseRedirect  
 def get_project(request):
     project_list=[]
     try:
@@ -206,6 +208,13 @@ def get_quantity(request):
     results['ModuleNum']=ModuleNum
     results['ApiNum']=ApiNum
     return HttpResponse(json.dumps(results))
+
+def show_report(request,name):
+    if request.method=='GET':
+        report_name=name
+    return render(request,report_name)
+
+ 
     
 
 
