@@ -6,7 +6,7 @@ Created on 2018年7月16日
 import requests
 import json
 import unittest
-import HTMLTestReportCN
+from ApiManager import  HTMLTestReportCN
 from ApiManager.models import ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
 class getDb():
     def __init__(self,api_id):
