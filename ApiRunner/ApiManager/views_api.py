@@ -165,7 +165,6 @@ def Save_ApiResponse(request):
             required=False
         else:
             required=True
-        print(form)
         if form.is_valid():
             api_id=form.cleaned_data['belong_Api']
             name=form.cleaned_data['name']
@@ -190,7 +189,6 @@ def run_testcase_unittest(request):
         data=getData(eid)
         suite=unittest.TestSuite()
         suite.addTest(ParametrizedTestCase.parametrize(Testapi,param=data))
-#         unittest.TextTestRunner(verbosity=2).run(suite)
         nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H-%M-%S')
         filePath =settings.REPORT_DIRS+[nowTime]+['.html']
         fp = open(''.join(filePath),'wb+')
