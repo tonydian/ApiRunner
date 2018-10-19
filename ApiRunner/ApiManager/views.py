@@ -194,6 +194,15 @@ def report_list(request):
             fileList.append(file)       
     print(fileList)
     return render(request,'report_list.html',{'fileList':fileList})
+
+def del_report(request):
+    ret={'status':True}
+    try:
+        pass
+    except Exception as e:
+        ret['status']=False
+    return HttpResponse(json.dumps(ret))
+    
             
                 
             

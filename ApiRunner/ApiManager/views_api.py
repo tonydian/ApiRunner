@@ -194,6 +194,7 @@ def run_testcase_unittest(request):
         fp = open(''.join(filePath),'wb+')
         runner =HTMLTestRunner(stream=fp,title='Test Report')
         runner.run(suite)
+        fp.close()
     return HttpResponse(json.dumps({'status':200}))
 
 def get_quantity(request):
@@ -209,7 +210,7 @@ def get_quantity(request):
 
 def show_report(request,name):
     if request.method=='GET':
-        report_name=name
+        report_name=request.GET.get('value')
     return render(request,report_name)
 
  
