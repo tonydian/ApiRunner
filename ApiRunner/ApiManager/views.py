@@ -192,13 +192,14 @@ def report_list(request):
     for root,dirs,files in os.walk(''.join(filePath)):
         for file in files:
             fileList.append(file)       
-    print(fileList)
     return render(request,'report_list.html',{'fileList':fileList})
 
 def del_report(request):
     ret={'status':True}
     try:
-        pass
+        value=request.GET.get('value')
+        filePath =settings.REPORT_DIRS+[value]
+        os.remove(''.join(filePath))
     except Exception as e:
         ret['status']=False
     return HttpResponse(json.dumps(ret))

@@ -40,5 +40,6 @@ urlpatterns = [
     path('testcase_list/',ApiManager_views.testcase_list),
     path('del_testcase/',ApiManager_views.del_testcase),
     path('edit_testcase/<int:eid>/',ApiManager_views.add_testcase_page),
-    path('report_list/',ApiManager_views.report_list)
+    path('report_list/',ApiManager_views.report_list),
+    path('del_report/',ApiManager_views.del_report)
 ]

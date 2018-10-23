@@ -166,6 +166,16 @@ def run(httpType,requestType,apiAddress,requestParameterType,headers,Parameter,R
         response['result']=status['result']
         return json.dumps(response)
     
+def getApiByModule(module_id):
+    id_list=[]
+    ApiList=ApiInfo.objects.filter(belong_module_id=module_id)
+    if ApiList.exists():
+        for Api in ApiList:
+            print(Api)
+            id_list.append(Api.id)
+    return id_list
+        
+    
 def getData(api_id):
     DbData=getDb(api_id)
     info=DbData.getApiInfo()
@@ -183,6 +193,7 @@ def getData(api_id):
     return data
 
 class Testapi(ParametrizedTestCase):
+    '''测试'''
     def test_one(self):
         url=self.param['httpType']+'://'+self.param['apiAddress']
         if self.param['requestType']=='get':

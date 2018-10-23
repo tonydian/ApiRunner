@@ -7,12 +7,12 @@ import json
 from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
 from ApiManager.forms import AddApiInfoForm,AddApiHead,AddApiParameter,AddApiResponse,AddApiParameter_raw
 from django.http import HttpResponse
-from ApiManager.TestEngine import RunTestCase,Testapi,ParametrizedTestCase,getData
+from ApiManager.TestEngine import RunTestCase,Testapi,ParametrizedTestCase,getData,getApiByModule
 from ApiManager.HTMLTestReportCN import HTMLTestRunner
 from django.conf import settings
 import unittest
 import datetime
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponseRedirect  
 def get_project(request):
     project_list=[]
@@ -187,6 +187,7 @@ def run_testcase_unittest(request):
     if request.method=='GET':
         eid=request.GET.get('CaseId')
         data=getData(eid)
+        Testapi.test_one.__doc__= get_object_or_404(ApiInfo,id=eid).name
         suite=unittest.TestSuite()
         suite.addTest(ParametrizedTestCase.parametrize(Testapi,param=data))
         nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H-%M-%S')
@@ -195,7 +196,27 @@ def run_testcase_unittest(request):
         runner =HTMLTestRunner(stream=fp,title='Test Report')
         runner.run(suite)
         fp.close()
-    return HttpResponse(json.dumps({'status':200}))
+    return HttpResponse(json.dumps({'status':'执行成功'}))
+
+def run_test_module(request):
+    if request.method=='GET':
+        eid=request.GET.get('value')
+        api_id=getApiByModule(eid)
+        suite=unittest.TestSuite()
+        for api in api_id:
+            data=getData(api)
+            Testapi.test_one.__doc__= get_object_or_404(ApiInfo,id=api).name
+            suite.addTest(ParametrizedTestCase.parametrize(Testapi,param=data))
+        nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H-%M-%S')
+        filePath =settings.REPORT_DIRS+[nowTime]+['.html']
+        fp = open(''.join(filePath),'wb+')
+        runner =HTMLTestRunner(stream=fp,title='Test Report')
+        runner.run(suite)
+        fp.close()
+    return HttpResponse(json.dumps({'status':'执行成功'}))
+            
+        
+        
 
 def get_quantity(request):
     if request.method=='GET':
@@ -210,7 +231,7 @@ def get_quantity(request):
 
 def show_report(request,name):
     if request.method=='GET':
-        report_name=request.GET.get('value')
+        report_name=name
     return render(request,report_name)
 
  

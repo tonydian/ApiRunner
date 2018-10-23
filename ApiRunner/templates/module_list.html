@@ -22,8 +22,6 @@ Index
                             success:function (arg) {
                                 var dict = JSON.parse(arg);
                                 if(dict.status){
-//                                    $(this).remove();
-//                                    window.location.reload()
                                     alert("删除成功")
                                 }
                                 window.location.reload()
@@ -38,19 +36,24 @@ Index
                 }else{
                     eid=$("td input[type='checkbox']:checked").val()
                     $('#editmodule').attr("href","/edit_module/"+eid+"/")
-                    
-//                    $.ajax({
-//                        url: '/add_module/',
-//                        type: 'POST',
-//                        data: {'value': $("td input[type='checkbox']:checked").val()},
-//                        success:function (arg) {
-//                            var dict = JSON.parse(arg);
-//                            if(dict.status){
-//                                window.location.href="/add_module/"
-//                            }
-//                            $('#module_name').val(dict.module_name)
-//                        }
-//                    })
+                }
+            })
+            $('#runtestcase').click(function () {
+                if($("td input[type='checkbox']:checked").length !=1){
+                    alert('请选择一个模块运行用例')
+                }else{
+                    eid=$("td input[type='checkbox']:checked").val()
+                    $.ajax({
+                        url:'/api/run_test_module/',
+                        tpye:'GET',
+                        data:{'value':eid},
+                        success:function (arg) {
+                            var dict = JSON.parse(arg);
+                            if(dict.status){
+                                alert("运行成功")
+                            }
+                        }
+                    })
                 }
             })
         });
@@ -66,6 +69,7 @@ Index
        			<a href="/add_module/" class="btn btn-primary"><i class="fa fa-edit"></i>新增模块</a>
        			<a href="#" class="btn btn-primary" id='delmodule'><i class="fa fa-pencil"></i>删除模块</a>
        			<a href="#" class="btn btn-primary" id='editmodule'><i class=" fa fa-refresh "></i>修改模块</a>
+       			<a href="#" class="btn btn-primary" id='runtestcase'><i class=" fa fa-plane "></i>运行用例</a>
        			</div>
        			</div>
         	</div>
