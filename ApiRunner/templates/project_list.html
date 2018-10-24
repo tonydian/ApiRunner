@@ -38,21 +38,27 @@ Index
                 }else{
                     eid=$("td input[type='checkbox']:checked").val()
                     $('#editproject').attr("href","/edit_project/"+eid+"/")
-                    
-//                    $.ajax({
-//                        url: '/add_project/',
-//                        type: 'POST',
-//                        data: {'value': $("td input[type='checkbox']:checked").val()},
-//                        success:function (arg) {
-//                            var dict = JSON.parse(arg);
-//                            if(dict.status){
-//                                window.location.href="/add_project/"
-//                            }
-//                            $('#project_name').val(dict.project_name)
-//                        }
-//                    })
                 }
             })
+            $('#runtestcase').click(function () {
+                if($("td input[type='checkbox']:checked").length !=1){
+                    alert('只支持运行一个项目运行测试用例')
+                }else{
+                    eid=$("td input[type='checkbox']:checked").val()
+                    $.ajax({
+                        url:'/api/run_test_project/',
+                        tpye:'GET',
+                        data:{'value':eid},
+                        success:function (arg) {
+                            var dict = JSON.parse(arg);
+                            if(dict.status){
+                                alert(dict.status)
+                            }
+                        }
+                    })
+                }
+            })
+
         });
 
      </script>
@@ -66,6 +72,7 @@ Index
        			<a href="/add_project/" class="btn btn-primary"><i class="fa fa-edit"></i>新增项目</a>
        			<a href="#" class="btn btn-primary" id='delproject'><i class="fa fa-pencil"></i>删除项目</a>
        			<a href="#" class="btn btn-primary" id='editproject'><i class=" fa fa-refresh "></i>修改项目</a>
+       			<a href="#" class="btn btn-primary" id='runtestcase'><i class=" fa fa-plane "></i>执行用例</a>
        			</div>
        			</div>
         	</div>

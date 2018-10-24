@@ -202,19 +202,27 @@ def run_test_module(request):
     if request.method=='GET':
         eid=request.GET.get('value')
         api_id=getApiByModule(eid)
-        suite=unittest.TestSuite()
-        for api in api_id:
-            data=getData(api)
-            Testapi.test_one.__doc__= get_object_or_404(ApiInfo,id=api).name
-            suite.addTest(ParametrizedTestCase.parametrize(Testapi,param=data))
-        nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H-%M-%S')
-        filePath =settings.REPORT_DIRS+[nowTime]+['.html']
-        fp = open(''.join(filePath),'wb+')
-        runner =HTMLTestRunner(stream=fp,title='Test Report')
-        runner.run(suite)
-        fp.close()
-    return HttpResponse(json.dumps({'status':'执行成功'}))
-            
+        if api_id:
+            suite=unittest.TestSuite()
+            module_name=get_object_or_404(ModuleInfo,id=eid).module_name
+            Testapi.__doc__=module_name
+            for api in api_id:
+                data=getData(api)
+                Testapi.test_case.__doc__= get_object_or_404(ApiInfo,id=api).name
+                suite.addTest(ParametrizedTestCase.parametrize(Testapi,param=data))
+            nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H-%M-%S')
+            filePath =settings.REPORT_DIRS+[nowTime]+['.html']
+            fp = open(''.join(filePath),'wb+')
+            runner =HTMLTestRunner(stream=fp,title='模块:'+module_name,tester="admin")
+            runner.run(suite)
+            fp.close()
+            return HttpResponse(json.dumps({'status':'执行成功'}))
+        else:
+            return HttpResponse(json.dumps({'status':'该模块没有测试用例'}))
+
+def run_test_project(request):
+    if request.method=='GET':
+        eid=request.GET.get('value')
         
         
 

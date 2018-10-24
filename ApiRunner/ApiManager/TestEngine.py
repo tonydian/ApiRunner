@@ -7,7 +7,7 @@ import requests
 import json
 import unittest
 from ApiManager import  HTMLTestReportCN
-from ApiManager.models import ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
+from ApiManager.models import ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw,ModuleInfo,ProjectInfo
 class getDb():
     def __init__(self,api_id):
         self.api_id=api_id
@@ -174,6 +174,12 @@ def getApiByModule(module_id):
             print(Api)
             id_list.append(Api.id)
     return id_list
+
+def getApiByProject(Project_id):
+    ModuleList=ModuleInfo.objects.filter(belong_project_id=Project_id)
+    for Module in ModuleList:
+        pass
+    
         
     
 def getData(api_id):
@@ -194,7 +200,7 @@ def getData(api_id):
 
 class Testapi(ParametrizedTestCase):
     '''测试'''
-    def test_one(self):
+    def test_case(self):
         url=self.param['httpType']+'://'+self.param['apiAddress']
         if self.param['requestType']=='get':
             r=requests.get(url,params=self.param['Parameter'],headers=self.param['headers'])
