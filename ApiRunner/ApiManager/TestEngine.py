@@ -177,10 +177,14 @@ def getApiByModule(module_id):
 
 def getApiByProject(Project_id):
     ModuleList=ModuleInfo.objects.filter(belong_project_id=Project_id)
+    ApiDict={}
     for Module in ModuleList:
-        pass
-    
-        
+        Apis=[]
+        ApiList=ApiInfo.objects.filter(belong_module_id=Module.id)
+        for Api in ApiList:
+            Apis.append(Api.id)
+        ApiDict[Module.module_name]=Apis
+    return ApiDict      
     
 def getData(api_id):
     DbData=getDb(api_id)

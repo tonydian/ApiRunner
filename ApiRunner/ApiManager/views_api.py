@@ -7,7 +7,7 @@ import json
 from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
 from ApiManager.forms import AddApiInfoForm,AddApiHead,AddApiParameter,AddApiResponse,AddApiParameter_raw
 from django.http import HttpResponse
-from ApiManager.TestEngine import RunTestCase,Testapi,ParametrizedTestCase,getData,getApiByModule
+from ApiManager.TestEngine import RunTestCase,Testapi,ParametrizedTestCase,getData,getApiByModule,getApiByProject
 from ApiManager.HTMLTestReportCN import HTMLTestRunner
 from django.conf import settings
 import unittest
@@ -223,6 +223,28 @@ def run_test_module(request):
 def run_test_project(request):
     if request.method=='GET':
         eid=request.GET.get('value')
+        project_name=get_object_or_404(ProjectInfo,id=eid).project_name
+        ApiDict=getApiByProject(eid)
+        i=0
+        suite=unittest.TestSuite()
+        for key,value in ApiDict.items():
+            if value: 
+                NewClassName='Testapi'+str(i)
+                NewClass=type(NewClassName,(Testapi,),{})
+                NewClass.__name__=key
+                for api in value:
+                    data=getData(api)
+                    NewClass.test_case.__doc__= get_object_or_404(ApiInfo,id=api).name
+                    suite.addTest(ParametrizedTestCase.parametrize(NewClass,param=data))
+                i=i+1
+        nowTime=datetime.datetime.now().strftime('%Y-%m-%d %H-%M-%S')
+        filePath =settings.REPORT_DIRS+[nowTime]+['.html']
+        fp = open(''.join(filePath),'wb+')
+        runner =HTMLTestRunner(stream=fp,title='项目:'+project_name,tester="admin")
+        runner.run(suite)
+        fp.close()
+        return HttpResponse(json.dumps({'status':'执行成功'}))
+                
         
         
 

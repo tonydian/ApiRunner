@@ -19,6 +19,7 @@ urlpatterns = [
     path(r'get_quantity/',views_api.get_quantity,name='get_quantity'),
     path(r'run_testcase_unittest/',views_api.run_testcase_unittest,name='run_testcase_unittest'),
     path(r'show_report/<path:name>/',views_api.show_report,name='show_report'),
-    path(r'run_test_module/',views_api.run_test_module,name='run_test_module')
+    path(r'run_test_module/',views_api.run_test_module,name='run_test_module'),
+    path(r'run_test_project/',views_api.run_test_project,name='run_test_project')
     
 ]

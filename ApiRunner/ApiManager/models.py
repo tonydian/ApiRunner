@@ -52,6 +52,15 @@ RESULT_CHOICE = (
     ('PASS', '成功'),
     ('FAIL', '失败'),
 )
+
+REPEAT_CHOICE=(
+    ('everyday','每天'),
+    ('once','一次'),
+)
+
+
+
+
 # Create your models here.
 class BaseTable(models.Model):
     create_time = models.DateTimeField('创建时间', auto_now_add=True)
@@ -137,6 +146,15 @@ class ApiResponse(models.Model):
     value = models.CharField('参数值',max_length=1024, blank=True, null=True)
     required = models.BooleanField("是否必填",default=False)
     description = models.CharField("描述",max_length=1024, blank=True,null=True)
+    
+# class TaskInfo(models.Model):
+#     class Meta:
+#         verbose_name='定时任务'
+#         db_table='TaskInfo'
+#     belong_project=models.ForeignKey(ProjectInfo,on_delete=models.CASCADE)
+#     name=models.CharField("任务名",max_length=1024,null=False)
+
+    
     
 
 
