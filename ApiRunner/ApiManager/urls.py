@@ -5,6 +5,9 @@ Created on 2018年7月13日
 '''
 from django.urls import path
 from ApiManager import views_api
+import time
+from apscheduler.schedulers.background import BackgroundScheduler
+from django_apscheduler.jobstores import DjangoJobStore,register_events, register_job 
 
 urlpatterns = [
     path(r'get_project/', views_api.get_project, name='get_project'),
@@ -23,3 +26,4 @@ urlpatterns = [
     path(r'run_test_project/',views_api.run_test_project,name='run_test_project')
     
 ]
+

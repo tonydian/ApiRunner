@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path,include
 from ApiManager import views as ApiManager_views
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/',ApiManager_views.index),
@@ -41,5 +42,9 @@ urlpatterns = [
     path('del_testcase/',ApiManager_views.del_testcase),
     path('edit_testcase/<int:eid>/',ApiManager_views.add_testcase_page),
     path('report_list/',ApiManager_views.report_list),
-    path('del_report/',ApiManager_views.del_report)
+    path('del_report/',ApiManager_views.del_report),
+    path('add_task/',ApiManager_views.add_task_page),
+    path('add_task_action/',ApiManager_views.add_task),
+    path('task_list/',ApiManager_views.task_list)
 ]
+

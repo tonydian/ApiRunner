@@ -1,9 +1,9 @@
 from django.shortcuts import render,get_object_or_404
 from django.shortcuts import HttpResponse
-from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
+from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw,TaskInfo
 import requests
 import json
-from .forms import AddProjectForm,AddModuleForm
+from .forms import AddProjectForm,AddModuleForm,AddTaskInfo
 from django.http.response import HttpResponseRedirect
 from ApiManager.TestEngine import getDb
 from django.conf import settings
@@ -203,6 +203,31 @@ def del_report(request):
     except Exception as e:
         ret['status']=False
     return HttpResponse(json.dumps(ret))
+
+def add_task_page(request):
+    project_list=ProjectInfo.objects.all()
+    return render(request,'add_task.html',{'projects':project_list})
+
+def add_task(request):
+    if request.method=="POST":
+        form=AddTaskInfo(request.POST)
+        print(form)
+        if form.is_valid():
+            belong_project_id=ProjectInfo.objects.filter(project_name=form.cleaned_data['belong_project']).values('id')
+            task_name = form.cleaned_data['task_name']
+            type = form.cleaned_data['task_type']
+            executeTime = form.cleaned_data['executeTime']
+            TaskInfo.objects.create(belong_project_id=belong_project_id[0]['id'],name=task_name,type=type,executeTime=executeTime)
+    return HttpResponseRedirect('/task_list/')
+
+def task_list(request):
+    task_list=TaskInfo.objects.all().select_related('belong_project')
+    return render(request,'task_list.html',{'tasks':task_list})
+    
+        
+        
+    
+    
     
             
                 

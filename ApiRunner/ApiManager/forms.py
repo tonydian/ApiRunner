@@ -56,3 +56,8 @@ class AddApiResponse(forms.Form):
     value = forms.CharField()
     description = forms.CharField(required=False)
     
+class AddTaskInfo(forms.Form):
+    belong_project=forms.CharField()
+    task_name=forms.CharField()
+    task_type=forms.CharField()
+    executeTime =forms.DateTimeField()
