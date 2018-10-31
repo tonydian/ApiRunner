@@ -4,7 +4,7 @@ Created on 2018年7月13日
 @author: Administrator
 '''
 import json
-from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw
+from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw,TaskInfo
 from ApiManager.forms import AddApiInfoForm,AddApiHead,AddApiParameter,AddApiResponse,AddApiParameter_raw
 from django.http import HttpResponse
 from ApiManager.TestEngine import RunTestCase,Testapi,ParametrizedTestCase,getData,getApiByModule,getApiByProject
@@ -253,10 +253,12 @@ def get_quantity(request):
         ProjectNum=ProjectInfo.objects.count()
         ModuleNum=ModuleInfo.objects.count()
         ApiNum=ApiInfo.objects.count()
+        TaskNum=TaskInfo.objects.count()
     results={}
     results['ProjectNum']=ProjectNum
     results['ModuleNum']=ModuleNum
     results['ApiNum']=ApiNum
+    results['TaskNum']=TaskNum
     return HttpResponse(json.dumps(results))
 
 def show_report(request,name):
