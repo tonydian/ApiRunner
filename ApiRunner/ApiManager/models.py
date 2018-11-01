@@ -155,7 +155,8 @@ class TaskInfo(models.Model):
     belong_project=models.ForeignKey(ProjectInfo,on_delete=models.CASCADE)
     name=models.CharField("任务名",max_length=1024,null=False)
     type = models.CharField(max_length=50, verbose_name='类型', choices=TASK_CHOICE)
-    executeTime = models.DateTimeField(max_length=50, verbose_name='执行时间')
+    executeTime = models.DateTimeField(max_length=50, verbose_name='执行时间',null=True)
+    fixedTime=models.CharField(max_length=50, verbose_name='固定时间',null=True)
     
     
 

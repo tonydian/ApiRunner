@@ -82,7 +82,11 @@ Index
 								                <td>{{ task.name }}</td>
 								                <td>{{ task.belong_project.project_name }}</td>
 								                <td>{{ task.type }}</td>
-								                <td>{{ task.executeTime }}</td>
+								                {% ifequal task.executeTime null %}
+                                    			<td>{{ task.fixedTime }}</td>
+                                    			{% else %}
+                                    			<td>{{ task.executeTime }}</td>
+                                    			{% endifequal %}
 								            </tr>
             							{% endfor %}
                                     </tbody>

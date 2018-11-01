@@ -60,4 +60,6 @@ class AddTaskInfo(forms.Form):
     belong_project=forms.CharField()
     task_name=forms.CharField()
     task_type=forms.CharField()
-    executeTime =forms.DateTimeField()
+    executeTime =forms.DateTimeField(required=False)
+    fixedTime=forms.CharField(required=False)
+ 

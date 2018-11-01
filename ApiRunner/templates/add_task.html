@@ -5,13 +5,29 @@ Index
 {% block script %}
 <script type="text/javascript">
 $(document).ready(function(){
-	
-	laydate.render({
-		  elem: '#executeTime'
-		  ,type: 'datetime'
-		});
+    laydate.render({
+        elem: '#executeTime' //指定元素
+        ,type: 'datetime'
+    });
+    $("#task_type").change(function () {
+        if($(this).val()!='once'){
+            $("#timediv").empty();
+            $("#timediv").append('<input type="text" class="form-control " id="fixedTime" name="fixedTime">');
+            laydate.render({
+                elem: '#fixedTime' //指定元素
+                ,type: 'time'
+            });
+        }else {
+            $("#timediv").empty();
+            $("#timediv").append('<input type="text" class="form-control " id="executeTime" name="executeTime">');
+            laydate.render({
+                elem: '#executeTime' //指定元素
+                ,type: 'datetime'
+            });
+        }
+    })
 
-   
+
 
 
 });
@@ -59,7 +75,7 @@ $(document).ready(function(){
                         		</div>
                     		</div>
                             <div class="form-group">
-                                <label for="test_user" class="col-sm-2 control-label">类型</label>
+                                <label for="task_type" class="col-sm-2 control-label">类型</label>
                                 <div class="col-sm-10">
                                     <select id="task_type" name="task_type" class="form-control">
                                 		<option value="once">只执行一次</option>
@@ -70,10 +86,9 @@ $(document).ready(function(){
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="dev_user" class="col-sm-2 control-label">执行时间</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="layui-input form-control" id="executeTime" name="executeTime"
-                                      value={{ dev_user }}>
+                                <label for="executeTime" class="col-sm-2 control-label">执行时间</label>
+                                <div class="col-sm-10" id="timediv">
+                                    <input type="text" class="form-control " id="executeTime" name="executeTime">
                                 </div>
                             </div>
 							<div class="form-group">

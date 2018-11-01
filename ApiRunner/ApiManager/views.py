@@ -217,7 +217,8 @@ def add_task(request):
             task_name = form.cleaned_data['task_name']
             type = form.cleaned_data['task_type']
             executeTime = form.cleaned_data['executeTime']
-            TaskInfo.objects.create(belong_project_id=belong_project_id[0]['id'],name=task_name,type=type,executeTime=executeTime)
+            fixedTime=form.cleaned_data['fixedTime']
+            TaskInfo.objects.create(belong_project_id=belong_project_id[0]['id'],name=task_name,type=type,executeTime=executeTime,fixedTime=fixedTime)
     return HttpResponseRedirect('/task_list/')
 
 def task_list(request):
