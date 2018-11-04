@@ -204,9 +204,18 @@ def del_report(request):
         ret['status']=False
     return HttpResponse(json.dumps(ret))
 
-def add_task_page(request):
+def add_task_page(request,eid=0):
     project_list=ProjectInfo.objects.all()
-    return render(request,'add_task.html',{'projects':project_list})
+    if eid!=0:
+        name=get_object_or_404(TaskInfo,id=eid).name
+        type=get_object_or_404(TaskInfo,id=eid).type
+        executeTime=get_object_or_404(TaskInfo,id=eid).executeTime
+        belong_project=get_object_or_404(TaskInfo,id=eid).belong_project
+        fixedTime=get_object_or_404(TaskInfo,id=eid).fixedTime
+        return render(request,'add_task.html',{'task_id':eid,'task_name':name,'belong_project':belong_project,'type':type,'executeTime':executeTime,'fixedTime':fixedTime,'projects':project_list})
+    else:
+        return render(request,'add_task.html',{'task_name':"",'projects':project_list})
+
 
 def add_task(request):
     if request.method=="POST":
