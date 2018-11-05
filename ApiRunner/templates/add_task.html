@@ -5,7 +5,7 @@ Index
 {% block script %}
 <script type="text/javascript">
 $(document).ready(function(){
-
+    {{ type.get_type_display }}
     if($('input#task_id').val()!="") {
         $('h1').text("修改用例");
     }
@@ -17,14 +17,14 @@ $(document).ready(function(){
     $("#task_type").change(function () {
         if($(this).val()!='once'){
             $("#timediv").empty();
-            $("#timediv").append('<input type="text" class="form-control " id="fixedTime" name="fixedTime">');
+            $("#timediv").append('<input type="text" class="form-control " id="fixedTime" name="fixedTime" value="{{ fixedTime }}">');
             laydate.render({
                 elem: '#fixedTime' //指定元素
                 ,type: 'time'
             });
         }else {
             $("#timediv").empty();
-            $("#timediv").append('<input type="text" class="form-control " id="executeTime" name="executeTime">');
+            $("#timediv").append('<input type="text" class="form-control " id="executeTime" name="executeTime" value="{{ executeTime }}">');
             laydate.render({
                 elem: '#executeTime' //指定元素
                 ,type: 'datetime'
@@ -66,7 +66,7 @@ $(document).ready(function(){
                                            placeholder="请输入任务名称" value={{ task_name }}>
                                 </div>
                             </div>
-                            <div class="form-group"> 
+                            <div class="form-group">
                         		<label class="col-sm-2 control-label" for="belong_project">所属项目</label>
                         		<div class="col-sm-10">
                             		<select id="belong_project" name="belong_project" class="form-control">
@@ -85,17 +85,25 @@ $(document).ready(function(){
                                 <label for="task_type" class="col-sm-2 control-label">类型</label>
                                 <div class="col-sm-10">
                                     <select id="task_type" name="task_type" class="form-control">
-                                		<option value="once">只执行一次</option>
-                                		<option value="everyday">每天</option>
-                                		<option value="Mon-fri">工作日</option>
-                                			
+                                        {% if type == 'once' %}
+                                            <option value="once" selected="selected" style='display: none'>只执行一次</option>
+                                        {% endif %}
+                                        {% if type == 'everyday' %}
+                                        <option value="everyday" selected="selected" style='display: none'>每天</option>
+                                        {% endif %}
+                                        {% if type == 'Mon-fri' %}
+                                        <option value="Mon-fri" selected="selected" style='display: none'>工作日</option>
+                                        {% endif %}
+                                        <option value="once">只执行一次</option>
+                                        <option value="everyday">每天</option>
+                                        <option value="Mon-fri">工作日</option>
                             		</select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="executeTime" class="col-sm-2 control-label">执行时间</label>
                                 <div class="col-sm-10" id="timediv">
-                                    <input type="text" class="form-control " id="executeTime" name="executeTime">
+                                    <input type="text" class="form-control " id="executeTime" name="executeTime" value={{ executeTime }}>
                                 </div>
                             </div>
 							<div class="form-group">
