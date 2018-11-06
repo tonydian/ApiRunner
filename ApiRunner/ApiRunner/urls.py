@@ -50,5 +50,7 @@ urlpatterns = [
     path('add_task_action/',ApiManager_views.add_task),
     path('task_list/',ApiManager_views.task_list),
     path('edit_task/<int:eid>/',ApiManager_views.add_task_page),
+    path('edit_task/',ApiManager_views.edit_task),
+    path('del_task/',ApiManager_views.del_task)
 ]
 

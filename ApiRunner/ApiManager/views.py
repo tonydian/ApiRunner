@@ -233,6 +233,33 @@ def add_task(request):
 def task_list(request):
     task_list=TaskInfo.objects.all().select_related('belong_project')
     return render(request,'task_list.html',{'tasks':task_list})
+
+def edit_task(request):
+    if request.method=="POST":
+        form=AddTaskInfo(request.POST)
+        print(form)
+        if form.is_valid():
+            task_id=request.POST.get('task_id')
+            print(task_id)
+            task_name = form.cleaned_data['task_name']
+            type = form.cleaned_data['task_type']
+            executeTime = form.cleaned_data['executeTime']
+            fixedTime=form.cleaned_data['fixedTime']
+            belong_project_id=ProjectInfo.objects.filter(project_name=form.cleaned_data['belong_project']).values('id')
+            TaskInfo.objects.filter(id=task_id).update(belong_project_id=belong_project_id[0]['id'],name=task_name,type=type,executeTime=executeTime,fixedTime=fixedTime)
+    else:
+        form=AddModuleForm()
+    return HttpResponseRedirect('/task_list/')
+
+def del_task(request):
+    ret={'status':True}
+    try:
+        nid=request.GET.get('value')
+        TaskInfo.objects.filter(id=nid).delete()
+    except Exception as e:
+        ret['status']=False
+    return HttpResponse(json.dumps(ret))
+    
     
         
         
