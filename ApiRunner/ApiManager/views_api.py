@@ -8,7 +8,7 @@ from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParamete
 from ApiManager.forms import AddApiInfoForm,AddApiHead,AddApiParameter,AddApiResponse,AddApiParameter_raw
 from django.http import HttpResponse
 from ApiManager.TestEngine import RunTestCase,Testapi,ParametrizedTestCase,getData,getApiByModule,getApiByProject
-from ApiManager.TaskEngine import RunApi
+from ApiManager.TaskEngine import getTaskInfo
 from ApiManager.HTMLTestReportCN import HTMLTestRunner
 from django.conf import settings
 import unittest
@@ -226,6 +226,7 @@ def run_test_project(request):
         eid=request.GET.get('value')
         project_name=get_object_or_404(ProjectInfo,id=eid).project_name
         ApiDict=getApiByProject(eid)
+        getTaskInfo()
         i=0
         suite=unittest.TestSuite()
         for key,value in ApiDict.items():

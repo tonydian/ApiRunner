@@ -41,4 +41,14 @@ class RunApi():
 def getTaskInfo():
     TaskList=TaskInfo.objects.filter()
     for Task in TaskList:
-        pass
+        if Task.type=='once':
+            executeTime=Task.executeTime
+            d=datetime.datetime.strptime(executeTime,'%Y-%m-%d %H:%M:%S')
+        if Task.type=='everyday':
+            fixedTime=Task.fixedTime
+            d=datetime.datetime.strptime(fixedTime, '%H:%M:%S')
+        if Task.type=='Mon-fri':
+            d=datetime.datetime.strptime(fixedTime, '%H:%M:%S')
+            
+            
+        
