@@ -16,6 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from ApiManager import views as ApiManager_views
+from django.conf import settings
+import sqlite3
+from apscheduler.schedulers.background import BackgroundScheduler
+from django_apscheduler.jobstores import DjangoJobStore, register_events, register_job
+import time
 
 
 urlpatterns = [
@@ -53,4 +58,25 @@ urlpatterns = [
     path('edit_task/',ApiManager_views.edit_task),
     path('del_task/',ApiManager_views.del_task)
 ]
+
+dbpath=settings.DB_DIRS+['db.sqlite3']
+conn=sqlite3.connect(''.join(dbpath))
+c=conn.cursor()
+c.execute("DELETE from django_apscheduler_djangojob;")
+conn.commit()
+conn.close()
+
+scheduler = BackgroundScheduler()
+scheduler.add_jobstore(DjangoJobStore(), "default")
+
+tigger="interval"
+@register_job(scheduler, tigger, seconds=10)
+def run_task():
+    print("I'm a test job!")
+
+register_events(scheduler)
+
+scheduler.start()
+print("Scheduler started!")
+
 

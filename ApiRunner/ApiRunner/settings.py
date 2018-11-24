@@ -129,3 +129,7 @@ REPORT_URL='/TestReport/'
 REPORT_DIRS=[
     os.path.join(HERE,"TestReport/")
 ]
+
+DB_DIRS=[
+    HERE
+]
