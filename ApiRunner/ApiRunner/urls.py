@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path,include
 from ApiManager import views as ApiManager_views
 from django.conf import settings
+from ApiManager import TaskEngine
 import sqlite3
 from apscheduler.schedulers.background import BackgroundScheduler
 from django_apscheduler.jobstores import DjangoJobStore, register_events, register_job
@@ -69,14 +70,16 @@ conn.close()
 scheduler = BackgroundScheduler()
 scheduler.add_jobstore(DjangoJobStore(), "default")
 
-tigger="interval"
-@register_job(scheduler, tigger, seconds=10)
-def run_task():
-    print("I'm a test job!")
-
-register_events(scheduler)
-
-scheduler.start()
-print("Scheduler started!")
+result=TaskEngine.getTaskInfo() 
+print(result)
+# tigger="interval"
+# @register_job(scheduler, tigger, seconds=10)
+# def run_task():
+#     print("I'm a test job!")
+# 
+# register_events(scheduler)
+# 
+# scheduler.start()
+# print("Scheduler started!")
 
 

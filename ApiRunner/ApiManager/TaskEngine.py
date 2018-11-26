@@ -11,6 +11,7 @@ import unittest
 import datetime
 from django.conf import settings
 from ApiManager.HTMLTestReportCN import HTMLTestRunner
+from amqp.basic_message import Message
 
 class RunApi():
     def __init__(self,projectId):
@@ -40,15 +41,34 @@ class RunApi():
 
 def getTaskInfo():
     TaskList=TaskInfo.objects.filter()
+    TaskResult={}
     for Task in TaskList:
+        message=[]
+        calendar={}
+        message.append(Task.type)
         if Task.type=='once':
             executeTime=Task.executeTime
-            d=datetime.datetime.strptime(executeTime,'%Y-%m-%d %H:%M:%S')
+            calendar['year']=executeTime.year
+            calendar['month']=executeTime.month
+            calendar['day']=executeTime.day
+            calendar['hour']=executeTime.hour
+            calendar['minute']=executeTime.minute
+            calendar['second']=executeTime.second
         if Task.type=='everyday':
             fixedTime=Task.fixedTime
             d=datetime.datetime.strptime(fixedTime, '%H:%M:%S')
+            calendar['hour']=d.hour
+            calendar['minute']=d.minute
+            calendar['second']=d.second
         if Task.type=='Mon-fri':
+            fixedTime=Task.fixedTime
             d=datetime.datetime.strptime(fixedTime, '%H:%M:%S')
+            calendar['hour']=d.hour
+            calendar['minute']=d.minute
+            calendar['second']=d.second
+        message.append(calendar)
+        TaskResult[Task.id]=message
+    return TaskResult
             
             
         
