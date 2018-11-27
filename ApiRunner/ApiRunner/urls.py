@@ -18,10 +18,12 @@ from django.urls import path,include
 from ApiManager import views as ApiManager_views
 from django.conf import settings
 from ApiManager import TaskEngine
+from ApiManager.TaskEngine import RunProjectTask
 import sqlite3
 from apscheduler.schedulers.background import BackgroundScheduler
 from django_apscheduler.jobstores import DjangoJobStore, register_events, register_job
 import time
+import datetime
 
 
 urlpatterns = [
@@ -72,14 +74,15 @@ scheduler.add_jobstore(DjangoJobStore(), "default")
 
 result=TaskEngine.getTaskInfo() 
 print(result)
-# tigger="interval"
-# @register_job(scheduler, tigger, seconds=10)
-# def run_task():
-#     print("I'm a test job!")
-# 
-# register_events(scheduler)
-# 
-# scheduler.start()
-# print("Scheduler started!")
+for k,v in result.items():
+    print(type(v[1]))
+    if(v[0]=='once'):
+        scheduler.add_job(RunProjectTask,'cron',year=v[2]['year'],month = v[2]['month'],day = v[2]['day'],hour = v[2]['hour'],minute = v[2]['minute'],second = v[2]['second'],args=[v[1]])
+    if(v[0]=='everyday'):
+        scheduler.add_job(RunProjectTask,'cron',hour=v[2]['hour'],minute=v[2]['minute'],second=v[2]['second'],args=[v[1]])
+    if(v[0]=='Mon-fri'):
+        scheduler.add_job(RunProjectTask,'cron',day_of_week='mon-fri',hour=v[2]['hour'],minute=v[2]['minute'],second=v[2]['second'],args=[v[1]])
+register_events(scheduler)
+scheduler.start()
 
 
