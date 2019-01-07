@@ -176,6 +176,7 @@ def Save_ApiResponse(request):
             
         else:
             form=AddApiResponse()
+            print(form)
         return HttpResponse(json.dumps({'status':200}))
         
         

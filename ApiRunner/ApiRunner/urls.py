@@ -75,7 +75,6 @@ scheduler.add_jobstore(DjangoJobStore(), "default")
 result=TaskEngine.getTaskInfo() 
 print(result)
 for k,v in result.items():
-    print(type(v[1]))
     if(v[0]=='once'):
         scheduler.add_job(RunProjectTask,'cron',year=v[2]['year'],month = v[2]['month'],day = v[2]['day'],hour = v[2]['hour'],minute = v[2]['minute'],second = v[2]['second'],args=[v[1]])
     if(v[0]=='everyday'):

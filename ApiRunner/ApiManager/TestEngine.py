@@ -212,7 +212,7 @@ class Testapi(ParametrizedTestCase):
             r=requests.post(url,data=self.param['Parameter'],headers=self.param['headers'])
         result=r.json()
         for item,key in self.param['Response'].items():
-            self.assertEqual(result[item], key)
+            self.assertEqual(str(result[item]), key)
             
 
             
