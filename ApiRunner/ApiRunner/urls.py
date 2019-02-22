@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path,include,re_path
 from ApiManager import views as ApiManager_views
 from django.conf import settings
 from ApiManager import TaskEngine
@@ -27,6 +27,10 @@ import datetime
 
 
 urlpatterns = [
+    re_path(r'^$',ApiManager_views.login),
+    re_path(r'^accounts/login/$',ApiManager_views.login),
+    path('login/',ApiManager_views.login),
+    path('login_action/',ApiManager_views.login_action),
     path('admin/', admin.site.urls),
     path('index/',ApiManager_views.index),
     path('api_get/',ApiManager_views.api_get),

@@ -214,7 +214,7 @@ class Testapi(ParametrizedTestCase):
         for item,key in self.param['Response'].items():
             self.assertEqual(str(result[item]), key)
             
-
+ 
             
 
 

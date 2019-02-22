@@ -8,9 +8,28 @@ from django.http.response import HttpResponseRedirect
 from ApiManager.TestEngine import getDb
 from django.conf import settings
 import os
+from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+def login(request):
+    return render(request,"Login.html")
+
+def login_action(request):
+    if request.method =='POST':
+        username=request.POST.get('username')
+        password=request.POST.get('password')
+    user=auth.authenticate(username=username,password=password)
+    if user is not None:
+        auth.login(request,user)
+        request.session['user']=username
+        response=HttpResponseRedirect('/index/')
+        return response
+    else:
+        return render(request,'Login.html',{'error':'username or password error!'})
+
+@login_required
 def index(request):
     return render(request,"index.html")
 

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Bootstrap Styles-->
+    {% load staticfiles %}
+    <link href="/static/css/bootstrap.css" rel="stylesheet"/>
+    <!-- FontAwesome Styles-->
+    <link href="/static/css/font-awesome.css" rel="stylesheet"/>
+    <!-- Morris Chart Styles-->
+    <link href="/static/js/morris/morris-0.4.3.min.css" rel="stylesheet"/>
+    <!-- Custom Styles-->
+    <link href="/static/css/custom-styles.css" rel="stylesheet"/>
+    <!-- Google Fonts-->
+    <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap Js -->
+    <script src="/static/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Js -->
+    <script src="/static/js/jquery.metisMenu.js"></script>
+    <!-- Morris Chart Js -->
+    <script src="/static/js/morris/raphael-2.1.0.min.js"></script>
+    <script src="/static/js/morris/morris.js"></script>
+
+
+    <script src="/static/js/easypiechart.js"></script>
+    <script src="/static/js/easypiechart-data.js"></script>
+
+    <script src="/static/js/Lightweight-Chart/jquery.chart.js"></script>
+
+    <!-- Custom Js -->
+    <script src="/static/js/custom-scripts.js"></script>
+    <script src="/static/laydate/laydate.js"></script>
+
+    <!--<script src="/static/css/bootstrap-datetimepicker.css"></script>-->
+    <!--<script src="/static/css/bootstrap-datetimepicker.min.css"></script>-->
+    <!--<script src="/static/js/bootstrap-datetimepicker.js"></script>-->
+    <!--<script src="/static/js/bootstrap-datetimepicker.min.js"></script>-->
+    {% block script %}{% endblock %}
+    <style>
+        .col-center-block {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+
+</head>
+
+<body>
+<div id="wrapper">
+    <div class="row">
+
+        <div class="col-lg-4 col-center-block">
+            <form id="login-form" class="form-horizontal" role="form" method="post" action="/login_action/">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 style="text-align: center">欢迎使用ApiRunner</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="username" class="col-sm-2 control-label">名称</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名"
+                                           value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="password" class="col-sm-2 control-label">密码</label>
+                                <div class="col-sm-9">
+                                    <input type="password" class="form-control" id="password" name="password"
+                                           placeholder="请输入密码" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-offset-1 col-sm-12">
+                                <button id="btn" type="submit" class="col-sm-4">登录</button>
+                                <a class="col-sm-5" style="text-align: right" href="//">立即注册</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                {{ error }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+
+</html>
