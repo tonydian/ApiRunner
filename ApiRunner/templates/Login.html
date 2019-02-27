@@ -4,9 +4,8 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>{% block title %}{% endblock %}</title>
+    <title>登录</title>
     <!-- Bootstrap Styles-->
-    {% load staticfiles %}
     <link href="/static/css/bootstrap.css" rel="stylesheet"/>
     <!-- FontAwesome Styles-->
     <link href="/static/css/font-awesome.css" rel="stylesheet"/>
@@ -37,12 +36,6 @@
     <!-- Custom Js -->
     <script src="/static/js/custom-scripts.js"></script>
     <script src="/static/laydate/laydate.js"></script>
-
-    <!--<script src="/static/css/bootstrap-datetimepicker.css"></script>-->
-    <!--<script src="/static/css/bootstrap-datetimepicker.min.css"></script>-->
-    <!--<script src="/static/js/bootstrap-datetimepicker.js"></script>-->
-    <!--<script src="/static/js/bootstrap-datetimepicker.min.js"></script>-->
-    {% block script %}{% endblock %}
     <style>
         .col-center-block {
             position: absolute;
@@ -57,7 +50,6 @@
 <body>
 <div id="wrapper">
     <div class="row">
-
         <div class="col-lg-4 col-center-block">
             <form id="login-form" class="form-horizontal" role="form" method="post" action="/login_action/">
                 <div class="panel panel-success">
@@ -69,7 +61,8 @@
                             <div class="form-group">
                                 <label for="username" class="col-sm-2 control-label">名称</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名"
+                                    <input type="text" class="form-control" id="username" name="username"
+                                           placeholder="请输入用户名"
                                            value="">
                                 </div>
                             </div>
@@ -86,7 +79,8 @@
                         <div class="row">
                             <div class="col-sm-offset-1 col-sm-12">
                                 <button id="btn" type="submit" class="col-sm-4">登录</button>
-                                <a class="col-sm-5" style="text-align: right" href="//">立即注册</a>
+                                <a class="col-sm-5" style="text-align: right" data-toggle="modal"
+                                   data-target="#register">立即注册</a>
                             </div>
                         </div>
                         <div class="row">
@@ -97,13 +91,81 @@
                     </div>
                 </div>
             </form>
-
-
         </div>
     </div>
-
 </div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="register" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h3 class="modal-title" id="myModalLabel">
+                    注册新用户
+                </h3>
+            </div>
+            <div class="modal-body">
+                <form id="register-form" class="form-horizontal" role="form" method="post" action="/register_action/">
+                    <div class="panel panel-success">
+                        <div class="panel-body">
+                            <div class="row col-sm-offset-1">
+                                <div class="form-group">
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="register_username"
+                                               name="register_username"
+                                               placeholder="请输入用户名"
+                                               value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-sm-offset-1">
+                                <div class="form-group">
+                                    <div class="col-sm-9">
+                                        <input type="email" class="form-control" id="register_email"
+                                               name="register_email"
+                                               placeholder="请输入邮箱" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-sm-offset-1">
+                                <div class="form-group">
+                                    <div class="col-sm-9">
+                                        <input type="password" class="form-control" id="register_password"
+                                               name="register_password"
+                                               placeholder="请输入密码" value="">
+                                    </div>
+                                </div>
+                            </div>
 
+
+                            <div class="row col-sm-offset-1">
+                                <div class="form-group">
+                                    <div class="col-sm-9">
+                                        <input type="password" class="form-control" id="repeat_register_password"
+                                               name="repeat_register_password"
+                                               placeholder="请再输入密码" value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-offset-1 col-sm-12">
+                                    <button id="register_btn" type="submit" class="col-sm-offset-3 col-sm-3">注册</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    {{ register_error }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal --></div>
 
 </body>
 

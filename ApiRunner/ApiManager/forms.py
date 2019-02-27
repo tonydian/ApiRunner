@@ -6,6 +6,12 @@ Created on 2018年6月30日
 @author: neildian
 '''
 from django import forms
+from django.contrib.auth.models import User
+
+error_msg = {
+    'username': {'required': '用户名不能为空', 'max_length': '最大20','min_length': '至少6'},
+    'password': {'required': '用户名密码不能为空', 'max_length': '最大20','min_length': '至少6'},
+}
  
 class AddProjectForm(forms.Form):
     project_name = forms.CharField()
@@ -62,4 +68,4 @@ class AddTaskInfo(forms.Form):
     task_type=forms.CharField()
     executeTime =forms.DateTimeField(required=False)
     fixedTime=forms.CharField(required=False)
- 
+    

@@ -72,10 +72,10 @@ c=conn.cursor()
 c.execute("DELETE from django_apscheduler_djangojob;")
 conn.commit()
 conn.close()
-
+  
 scheduler = BackgroundScheduler()
 scheduler.add_jobstore(DjangoJobStore(), "default")
-
+  
 result=TaskEngine.getTaskInfo() 
 print(result)
 for k,v in result.items():

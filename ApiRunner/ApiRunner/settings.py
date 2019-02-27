@@ -133,3 +133,5 @@ REPORT_DIRS=[
 DB_DIRS=[
     HERE
 ]
+
+AUTH_USER_MODEL='ApiManager.UserInfo'

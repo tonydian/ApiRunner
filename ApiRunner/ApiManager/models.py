@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser    
 
 
 HTTP_CHOICE = (
@@ -158,7 +159,12 @@ class TaskInfo(models.Model):
     executeTime = models.DateTimeField(max_length=50, verbose_name='执行时间',null=True)
     fixedTime=models.CharField(max_length=50, verbose_name='固定时间',null=True)
     
-    
+class UserInfo(AbstractUser):
+    class Meta:
+        verbose_name='用户信息'
+        db_table='UserInfo'
+    nid = models.AutoField(primary_key=True)
+    telephone = models.CharField(max_length=11, null=True, unique=True)
 
 
     

@@ -1,6 +1,6 @@
 from django.shortcuts import render,get_object_or_404
 from django.shortcuts import HttpResponse
-from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw,TaskInfo
+from ApiManager.models import ProjectInfo,ModuleInfo,ApiInfo,ApiHead,ApiParameter,ApiResponse,ApiParameterRaw,TaskInfo,UserInfo
 import requests
 import json
 from .forms import AddProjectForm,AddModuleForm,AddTaskInfo
@@ -32,6 +32,25 @@ def login_action(request):
 @login_required
 def index(request):
     return render(request,"index.html")
+
+
+def register_action(request):
+    if request.method=='POST':
+        password = request.POST.get('register_password', '')
+        repeat_password = request.POST.get('repeat_register_password', '')
+        email=request.POST.get('register_email', '')
+        username = request.POST.get('register_username', '')
+        if User.objects.filter(username=username):
+            return render(request,'Login.html',{'register_error':'用户已经存在'})
+        else:
+            new_user = User.objects.create_user(username=username, password=password,email=email)
+            new_user.save()
+        
+        
+    
+
+
+
 
 def api_get(request):
     url=request.POST.get('url','')
