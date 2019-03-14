@@ -29,6 +29,7 @@ import datetime
 urlpatterns = [
     re_path(r'^$',ApiManager_views.login),
     re_path(r'^accounts/login/$',ApiManager_views.login),
+    path('register_action/',ApiManager_views.register_action),
     path('login/',ApiManager_views.login),
     path('login_action/',ApiManager_views.login_action),
     path('admin/', admin.site.urls),

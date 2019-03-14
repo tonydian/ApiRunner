@@ -40,11 +40,12 @@ def register_action(request):
         repeat_password = request.POST.get('repeat_register_password', '')
         email=request.POST.get('register_email', '')
         username = request.POST.get('register_username', '')
-        if User.objects.filter(username=username):
+        if UserInfo.objects.filter(username=username):
             return render(request,'Login.html',{'register_error':'用户已经存在'})
         else:
-            new_user = User.objects.create_user(username=username, password=password,email=email)
+            new_user = UserInfo.objects.create_user(username=username, password=password,email=email)
             new_user.save()
+        return render(request,'Login.html',{'error':'注册成功'})
         
         
     
